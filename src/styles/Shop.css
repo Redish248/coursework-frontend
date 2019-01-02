@@ -1,0 +1,18 @@
+.card {
+    background-color: #fff;
+    min-width: 50px;
+    max-width: 250px;
+    min-height: 50px;
+    display: flex;
+    overflow-x: auto;
+}
+
+.card--content {
+    background-color: blue;
+    min-width: 40px;
+    margin: 5px;
+}
+
+.card::-webkit-scrollbar {
+    display: none;
+}

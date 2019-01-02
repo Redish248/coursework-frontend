@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import {InputText} from "primereact/components/inputtext/InputText";
+import {Button} from "primereact/components/button/Button";
 
 class Step1 extends Component {
     render() {
@@ -10,7 +11,7 @@ class Step1 extends Component {
               <InputText placeholder="name"/>
               <h5>Фамилия:</h5>
               <InputText placeholder="surname"/>
-              <p><button onClick={this.props.nextStep}>Вперёд</button></p>
+              <p><Button onClick={this.props.nextStep} label="Вперёд"/></p>
           </div>
         );
     }

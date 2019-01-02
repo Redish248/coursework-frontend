@@ -7,6 +7,7 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import {Calendar} from "primereact/components/calendar/Calendar";
 import {Spinner} from "primereact/components/spinner/Spinner";
+import {Button} from "primereact/components/button/Button";
 
 
 class Step2 extends Component {
@@ -24,8 +25,8 @@ class Step2 extends Component {
                 <Spinner  min={100} max={210} />
                 <h5>Вес:</h5>
                 <Spinner min={20} max={100} />
-                <p><button onClick={this.props.nextStep}>Вперёд</button></p>
-                <p><button onClick={this.props.previousStep}>Назад</button></p>
+                <p><Button onClick={this.props.nextStep} label="Вперёд"/></p>
+                <p><Button onClick={this.props.previousStep} label="Назад"/></p>
             </div>
         );
     }

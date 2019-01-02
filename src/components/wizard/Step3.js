@@ -14,8 +14,8 @@ class Step3 extends Component {
                 <Password/>
                 <h5>Подтвердите пароль:</h5>
                 <Password/>
-                <p><Button>Зарегистрироваться</Button></p>
-                <p><button onClick={this.props.previousStep}>Назад</button></p>
+                <p><Button label="Зарегистрироваться"/></p>
+                <p><Button onClick={this.props.previousStep} label="Назад"/></p>
             </div>
         );
     }
