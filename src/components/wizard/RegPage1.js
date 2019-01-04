@@ -12,9 +12,9 @@ export default class extends Component {
                 <NavigationHome/>
                 <h1>Введите данные:</h1>
                 <StepWizard>
-                    <Step1/>
-                    <Step2/>
-                    <Step3/>
+                    <Step1 />
+                    <Step2 />
+                    <Step3 />
                 </StepWizard>
             </div>
         );

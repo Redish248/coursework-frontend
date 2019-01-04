@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../styles/Home.css";
-import {MenuItem, Nav, Navbar, NavDropdown, NavItem} from "react-bootstrap";
+import {Nav, Navbar,NavItem} from "react-bootstrap";
 
 export default class ShopNavigation extends Component {
 

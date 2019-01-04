@@ -1,15 +1,23 @@
-import {SIGN_IN, SIGN_OUT, SIGN_UP} from "./actionTypes"
+import {SIGN_IN, SIGN_OUT, SIGN_UP_1, SIGN_UP_2, SIGN_UP_3} from "./actionTypes"
 
-export const signUp = (name, surname, nick, sex, height, weight, birthday ) => ({
-    type: SIGN_UP,
+export const signUp1 = (name, surname ) => ({
+    type: SIGN_UP_1,
     name: name,
     surname: surname,
-    nick: nick,
+});
+
+export const signUp2 = (sex, height, weight, birthday) => ({
+    type: SIGN_UP_2,
     sex: sex,
     height: height,
     weight: weight,
     birthday: birthday,
-    isAuthorised: true
+});
+
+export const signUp3 = (nick) => ({
+    type: SIGN_UP_3,
+    isAuthorised: true,
+    nick: nick,
 });
 
 export const signOut = () => ({
@@ -23,4 +31,5 @@ export const signIn = (nick) => ({
     nick: nick,
     isAuthorised: true
 });
+
 

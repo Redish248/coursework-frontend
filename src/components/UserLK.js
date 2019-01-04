@@ -20,7 +20,7 @@ export default class UserLK extends Component {
                                 <tbody>
                                 <tr>
                                     <td>Имя:</td>
-                                    <td>{this.props.name}</td>
+                                    <td>{this.props.state   }</td>
                                 </tr>
                                 <tr>
                                     <td>Фамилия:</td>

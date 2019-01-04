@@ -3,6 +3,9 @@ import './App.css';
 import Routes from "./Routes";
 
 class App extends Component {
+    constructor(store) {
+        super(store);
+    }
   render() {
     return (
       <div className="App">
