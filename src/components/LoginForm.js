@@ -4,9 +4,8 @@ import {Button} from "primereact/components/button/Button";
 import {Password} from "primereact/components/password/Password";
 import NavigationHome from "./NavigationHome";
 import {connect} from "react-redux";
-import {signIn, signUp1} from "../actions/actions";
+import {signIn} from "../actions/actions";
 import * as axios from "axios";
-import store from "redux/src/createStore";
 
  class LoginForm extends Component {
     constructor(props) {

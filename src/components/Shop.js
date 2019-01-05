@@ -2,8 +2,33 @@ import React, { Component } from "react";
 import ShopNavigation from "./ShopNavigation";
 
 import "../styles/Shop.css";
+import * as axios from "axios/index";
 
 class Shop extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            products: []
+        }
+    }
+    getProducts = () => {
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/hungergames/shop',
+            withCredentials: true
+        }).then((res) => {
+
+                this.setState({
+                    products: res.data
+                });
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                this.props.history.push('/ss');
+            }
+        });
+    };
+
     render() {
         return(
             <div>

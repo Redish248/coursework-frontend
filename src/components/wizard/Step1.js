@@ -32,7 +32,7 @@ class Step1 extends Component {
                 <h5>Имя:</h5>
                 <InputText placeholder="name" value={this.state.name} onChange={this.handleChange('name')}/>
                 <h5>Фамилия:</h5>
-                <InputText placeholder="surname" value={this.props.surname} onChange={this.handleChange('surname')}/>
+                <InputText placeholder="surname" value={this.state.surname} onChange={this.handleChange('surname')}/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
             </div>
         );

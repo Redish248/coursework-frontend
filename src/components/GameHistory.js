@@ -10,16 +10,13 @@ constructor(props) {
     }
 }
 
-    getPoints = () => {
+    getGames = () => {
         axios({
             method: 'get',
-            url: 'http://localhost:8080/lab4/getgames',
+            url: 'http://localhost:8080/coursework/getgames',
             withCredentials: true
         }).then((res) => {
-                res.data.forEach(function(i) {
-                    i.x = Math.ceil(i.x*100)/100;
-                    i.y = Math.ceil(i.y*100)/100;
-                });
+
                 this.setState({
                     games: res.data
                 });

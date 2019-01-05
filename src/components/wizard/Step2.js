@@ -42,13 +42,13 @@ class Step2 extends Component {
                 <h5>Аватар:</h5>
 
                 <h5>Пол:</h5>
-                <SelectButton options={genderItems} value={this.props.sex} onChange={this.handleChange('sex')} />
+                <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
                 <h5>Дата рождения:</h5>
-                <Calendar  monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.props.birthday} onChange={this.handleChange('birthday')}/>
+                <Calendar  monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
                 <h5>Рост:</h5>
-                <Spinner  min={100} max={210} value={this.props.height} onChange={this.handleChange('height')} />
+                <Spinner  min={100} max={210} value={this.state.height} onChange={this.handleChange('height')} />
                 <h5>Вес:</h5>
-                <Spinner min={20} max={100} value={this.props.weight} onChange={this.handleChange('weight')}/>
+                <Spinner min={20} max={100} value={this.state.weight} onChange={this.handleChange('weight')}/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
                 <p><Button onClick={this.props.previousStep} label="Назад"/></p>
             </div>
