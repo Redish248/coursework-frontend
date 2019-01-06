@@ -126,8 +126,8 @@ import {Column} from "primereact/components/column/Column";
                             <div id="resultPoint">
                                 <center>
                                     <DataTable id="skillTable" value={this.state.skills}>
-                                        <Column field="x" header="Название"/>
-                                        <Column field="y" header="Коэффициент владения"/>
+                                        <Column field="skill.name" header="Название"/>
+                                        <Column field="coefficient" header="Коэффициент владения"/>
                                     </DataTable>
                                 </center>
                             </div>

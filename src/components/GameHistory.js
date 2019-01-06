@@ -16,7 +16,6 @@ constructor(props) {
             url: 'http://localhost:8080/coursework/getgames',
             withCredentials: true
         }).then((res) => {
-
                 this.setState({
                     games: res.data
                 });
@@ -31,11 +30,30 @@ constructor(props) {
         return(
             <div>
                 <UserNavigation/>
-                <div>
-                    тут будут все игры
-                </div>
+                <div id="gamesTable"/>
             </div>
         );
+    }
+
+    createGamesTable = () => {
+        document.getElementById("gamesTable").innerText = "";
+        this.state.games.forEach(function(element) {
+            document.getElementById("gamesTable").innerHTML +=
+                '<div> ' +
+                '<table> ' +
+                '<thead>Игра'+ element.id +'</thead> ' +
+                '<tbody>' +
+                '<tr><td>' +
+                '<table><tr><td>Арена:</td><td>'+element.arena.name+'</td></tr>' +
+                '<tr><td>Победитель:</td><td>'+element.tribute.user.name+'</td></tr>' +
+                '<tr><td>Дата:</td><td>'+element.startDate+'</td></tr>' +
+                '<tr><td>Длительность:</td><td>'+element.duration+'</td></tr>' +
+                '<tr><td>Тип:</td><td>'+element.type+'</td></tr></table>' +
+                '</td><td>тут картинка будет</td></tr>' +
+                '</tbody>' +
+                '</table> ' +
+                '</div>'
+        })
     }
 }
 
