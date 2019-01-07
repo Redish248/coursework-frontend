@@ -1,9 +1,5 @@
-img {
-    height: 300px;
-    width:700px
-}
-
-.homeDiv {
+.step {
+    text-align: left;
     display: inline-block;
     padding: 20px;
     border-radius: 15px;

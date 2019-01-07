@@ -18,6 +18,7 @@ class Step3 extends Component {
 
     }
 
+    //TODO: добавить изображение
     signUp = (event) => {
         let that = this;
         event.preventDefault();
@@ -30,6 +31,7 @@ class Step3 extends Component {
         formData.set('weight', this.props.weight);
         formData.set('birthday', this.props.birthday);
         formData.set('surname', this.props.surname);
+        formData.set('picture', this.props.file);
         axios({
             method: 'post',
             url: 'http://localhost:8080/hungergames/signup',
@@ -48,11 +50,11 @@ class Step3 extends Component {
                 }
             );
         }).catch(function (error) {
+            console.log(error);
             if (error === undefined || error.response === undefined) {
                 that.props.history.push('/ss');
             }
             if ((error.response) && (error.response.status = 400)) {
-                console.log(error)
                 document.getElementById('error').innerText = "Такой пользователь уже есть!";
             }
         });
@@ -75,13 +77,14 @@ class Step3 extends Component {
 
     render() {
         return(
-            <div>
+            <div className="step">
+                <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
-                <h5>Ник:</h5>
+                <h4>Ник:</h4>
                 <InputText value={this.state.nick} onChange={this.handleChange('nick')}/>
-                <h5>Пароль:</h5>
+                <h4>Пароль:</h4>
                 <Password value={this.state.password} onChange={this.handleChange('password')}/>
-                <h5>Подтвердите пароль:</h5>
+                <h4>Подтвердите пароль:</h4>
                 <Password  feedback={false} value={this.state.pass} onChange={(e) => {this.setState({pass: e.target.value}); this.checkPassword(e.target.value);}} />
                 <div id="error"/>
                 <p><Button label="Зарегистрироваться" onClick={this.signUp}/></p>
@@ -100,7 +103,8 @@ function mapStateToProps(state)  {
         height: state.height,
         weight: state.weight,
         birthday: state.birthday,
-        password: state.password
+        password: state.password,
+        file: state.file
     }
 }
 

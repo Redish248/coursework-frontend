@@ -27,11 +27,12 @@ class Step1 extends Component {
 
     render() {
         return(
-            <div>
+            <div className="step">
+                <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
-                <h5>Имя:</h5>
+                <h4>Имя:</h4>
                 <InputText placeholder="name" value={this.state.name} onChange={this.handleChange('name')}/>
-                <h5>Фамилия:</h5>
+                <h4>Фамилия:</h4>
                 <InputText placeholder="surname" value={this.state.surname} onChange={this.handleChange('surname')}/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
             </div>

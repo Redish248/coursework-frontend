@@ -6,12 +6,13 @@ export const signUp1 = (name, surname ) => ({
     surname: surname,
 });
 
-export const signUp2 = (sex, height, weight, birthday) => ({
+export const signUp2 = (sex, height, weight, birthday, file) => ({
     type: SIGN_UP_2,
     sex: sex,
     height: height,
     weight: weight,
     birthday: birthday,
+    file: file
 });
 
 export const signUp3 = (nick) => ({

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UserNavigation from "./UserNavigation";
+import UserNavigation from "./Navigation/UserNavigation";
 import * as axios from "axios";
 
 class GameHistory extends Component {

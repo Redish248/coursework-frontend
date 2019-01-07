@@ -1,0 +1,30 @@
+#skillTable {
+    width: 400px;
+}
+
+#mainTable td{
+   padding: 6px;
+}
+
+#userDataTable {
+    width: 350px;
+    text-align: left;
+    border: 2px double black;
+    border-collapse: collapse;
+    font-size: 15px;
+    margin: 4px;
+}
+
+#userDataTable td {
+    padding: 5px;
+    border: 2px double black;
+    border-collapse: collapse;
+}
+
+#userDataTable thead {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+
+

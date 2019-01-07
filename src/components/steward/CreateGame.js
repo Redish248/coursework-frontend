@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
 
-class GameTribute extends Component {
+class CreateGame extends Component {
+
     render() {
-        return(
+        return (
             <div>
-                эх
+               игра для распорядителя
             </div>
         );
     }
 }
+
+export default CreateGame;

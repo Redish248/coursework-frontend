@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import {InputText} from "primereact/components/inputtext/InputText";
 import {Button} from "primereact/components/button/Button";
 import {Password} from "primereact/components/password/Password";
-import NavigationHome from "./NavigationHome";
+import NavigationHome from "./Navigation/NavigationHome";
 import {connect} from "react-redux";
 import {signIn} from "../actions/actions";
 import * as axios from "axios";
+import "../styles/RegPage.css";
 
  class LoginForm extends Component {
     constructor(props) {
@@ -24,11 +25,11 @@ import * as axios from "axios";
 
     clickButton = () => {
         this.props.signIn(this.state.nick);
+        this.logIn();
         this.props.history.push('/home');
     };
 
-     logIn = (event) => {
-         event.preventDefault();
+     logIn = () => {
          let formData = new FormData();
          formData.set('username', this.state.nick);
          formData.set('password', this.state.password);
@@ -38,10 +39,9 @@ import * as axios from "axios";
              data: formData,
              withCredentials: true
          }).then(response => {
-                 sessionStorage.setItem('isAuthorised', 'true');
                  this.props.signIn(this.state.nick);
                  this.props.history.push('/home');
-
+                 console.log('login')
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
@@ -55,12 +55,12 @@ import * as axios from "axios";
 
     render() {
         return(
-            <div>
+            <div className="step">
                 <NavigationHome/>
-                <p>Вход:</p>
-                <p>Введите ник:</p>
+                <h2>Вход:</h2>
+                <h4>Введите ник:</h4>
                 <InputText value={this.state.nick} onChange={this.handleChange('nick')}/>
-                <p>Введите пароль:</p>
+                <h4>Введите пароль:</h4>
                 <Password feedback={false} value={this.state.password} onChange={this.handleChange('password')}/>
                 <p><Button label="Войти" onClick={this.clickButton}/></p>
             </div>

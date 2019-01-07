@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import {InputText} from "primereact/components/inputtext/InputText";
 import {SelectButton} from "primereact/components/selectbutton/SelectButton";
 
 import 'primereact/resources/themes/nova-light/theme.css';
@@ -9,8 +8,7 @@ import {Calendar} from "primereact/components/calendar/Calendar";
 import {Spinner} from "primereact/components/spinner/Spinner";
 import {Button} from "primereact/components/button/Button";
 import {connect} from "react-redux";
-import {signUp1, signUp2} from "../../actions/actions";
-import RegPage1 from "./RegPage1";
+import {signUp2} from "../../actions/actions";
 
 
 class Step2 extends Component {
@@ -20,7 +18,9 @@ class Step2 extends Component {
             sex: '',
             weight: 30,
             height: 150,
-            birthday: new Date()
+            birthday: new Date(),
+            file: '',
+            imagePreviewUrl: ''
         }
     }
 
@@ -31,23 +31,42 @@ class Step2 extends Component {
     };
 
     clickButton = () => {
-        this.props.signUp2(this.props.sex, this.props.height, this.props.weight, this.props.birthday);
+        this.props.signUp2(this.state.sex, this.state.height, this.state.weight, this.state.birthday, this.state.imagePreviewUrl);
         this.props.goToStep(3);
     };
 
+    _handleImageChange(e) {
+        e.preventDefault();
+
+        let reader = new FileReader();
+        let file = e.target.files[0];
+
+        reader.onloadend = () => {
+            this.setState({
+                file: file,
+                imagePreviewUrl: reader.result
+            });
+        }
+
+        reader.readAsDataURL(file)
+    }
+
     render() {
         return(
-            <div>
+            <div className="step">
+                <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
-                <h5>Аватар:</h5>
-
-                <h5>Пол:</h5>
+                <h4>Аватар:</h4>
+                <input className="fileInput"
+                       type="file"
+                       onChange={(e)=>this._handleImageChange(e)} />
+                <h4>Пол:</h4>
                 <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
-                <h5>Дата рождения:</h5>
+                <h4>Дата рождения:</h4>
                 <Calendar  monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
-                <h5>Рост:</h5>
+                <h4>Рост:</h4>
                 <Spinner  min={100} max={210} value={this.state.height} onChange={this.handleChange('height')} />
-                <h5>Вес:</h5>
+                <h4>Вес:</h4>
                 <Spinner min={20} max={100} value={this.state.weight} onChange={this.handleChange('weight')}/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
                 <p><Button onClick={this.props.previousStep} label="Назад"/></p>
@@ -65,13 +84,14 @@ function mapStateToProps(state)  {
         sex: state.sex,
         birthday: state.birthday,
         weight: state.weight,
-        height: state.height
+        height: state.height,
+        file: state.imagePreviewUrl
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        signUp2 : (sex, height, weight, birthday) => dispatch(signUp2(sex, height, weight, birthday))
+        signUp2 : (sex, height, weight, birthday, file) => dispatch(signUp2(sex, height, weight, birthday, file))
     }
 };
 

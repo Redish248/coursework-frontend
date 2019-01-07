@@ -1,6 +1,6 @@
 import {SIGN_IN, SIGN_OUT, SIGN_UP_1, SIGN_UP_2} from "../actions/actionTypes"
 
-export function userReducer(state = {isAuthorised: false, nick: "", name: "", surname: "", sex: false, birthday: "", height: 120, weight: 40}, action) {
+export function userReducer(state = {isAuthorised: false, nick: "", name: "", surname: "", sex: false, birthday: "", height: 120, weight: 40, file: ""}, action) {
     switch (action.type) {
         case SIGN_IN:
             return {
@@ -23,7 +23,8 @@ export function userReducer(state = {isAuthorised: false, nick: "", name: "", su
                 sex: action.sex,
                 height: action.height,
                 weight: action.weight,
-                birthday: action.birthday
+                birthday: action.birthday,
+                file: action.file
             };
         default:
             return {
@@ -34,6 +35,7 @@ export function userReducer(state = {isAuthorised: false, nick: "", name: "", su
                 weight: state.weight,
                 birthday: state.birthday,
                 nick: action.nick,
+                file: action.file,
                 isAuthorised: true
             };
     }

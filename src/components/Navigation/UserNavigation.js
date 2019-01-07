@@ -1,8 +1,23 @@
 import React, { Component } from "react";
-import "../styles/Home.css";
+import "../../styles/Home.css";
 import { Nav, Navbar, NavItem} from "react-bootstrap";
+import * as axios from "axios/index";
+import {signOut} from "../../actions/actions";
+import {connect} from "react-redux";
 
-export default class UserNavigation extends Component {
+class UserNavigation extends Component {
+
+    handleLogOut = (event) => {
+        axios.post('http://localhost:8080/logout')
+            .then(res => {
+                console.log('logout')
+            }).catch((error)=> {
+            if (error.response.status === 404) {
+                this.props.signOut();
+            }
+        });
+
+    };
 
     render() {
         return (
@@ -30,7 +45,7 @@ export default class UserNavigation extends Component {
                             </NavItem>
                         </Nav>
                         <Nav pullRight>
-                            <NavItem eventKey={1} href="/login">
+                            <NavItem eventKey={1} href="/" onClick={this.handleLogOut}>
                                 Выйти
                             </NavItem>
                         </Nav>
@@ -40,4 +55,12 @@ export default class UserNavigation extends Component {
         );
     }
 }
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        signOut : (nick) => dispatch(signOut(nick))
+    }
+};
+
+export default connect(null,mapDispatchToProps )(UserNavigation);
 

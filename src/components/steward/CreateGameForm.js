@@ -1,31 +1,33 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
 
-class Training extends Component {
+class CreateGameForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            training: [],
-            percent: 0,
-            skill: []
+            game: [] ,
+            typeOfGame: '',
+            numberOfTributes: 24,
+            startDate: ''
         }
     }
 
-
-    //TODO: дописать связь с redux и повышение скилла
-    improveSkill = () => {
+    //TODO: всё через store передавать
+    createGame = () => {
         let that = this;
         let formData = new FormData();
-        formData.set('name', this.state.training.name);
-        formData.set('percent', this.state.percent.toString());
+        formData.set('typeOfGame', this.state.typeOfGame);
+        formData.set('arenaID', this.props.arenaID);
+        formData.set('numberOfTributes', this.state.numberOfTributes.toString());
+        formData.set('startDate', this.state.startDate);
         axios({
             method: 'post',
-            url: 'http://localhost:8080/hungergames/improveSkill',
+            url: 'http://localhost:8080/hungergames/create_game',
             data: formData,
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    skill: res.data
+                    game: res.data
                 });
             }
         ).catch(function (error) {
@@ -38,10 +40,10 @@ class Training extends Component {
     render() {
         return (
             <div>
-                тренировка тут будет
+                форма для создания игры
             </div>
         );
     }
 }
 
-export default Training;
+export default CreateGameForm;

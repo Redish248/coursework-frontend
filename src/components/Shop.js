@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ShopNavigation from "./ShopNavigation";
+import ShopNavigation from "./Navigation/ShopNavigation";
 
 import "../styles/Shop.css";
 import * as axios from "axios/index";
