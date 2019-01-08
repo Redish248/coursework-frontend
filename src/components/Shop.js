@@ -12,22 +12,52 @@ class Shop extends Component {
         }
     }
     getProducts = () => {
+        let that = this;
         axios({
             method: 'get',
             url: 'http://localhost:8080/hungergames/shop',
             withCredentials: true
         }).then((res) => {
-
                 this.setState({
                     products: res.data
                 });
+                this.createProductIcons();
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
-                this.props.history.push('/ss');
+                that.props.history.push('/ss');
             }
         });
     };
+
+    componentDidMount() {
+        this.getProducts();
+    }
+
+    createProductIcons() {
+        this.state.products.forEach(function(element) {
+            if (element.typeOfPresent === 'Еда') {
+                document.getElementById("food").innerHTML +=
+                    '<div>'+ element.name+'</div>'
+            }
+            if (element.typeOfPresent === 'Напиток') {
+                document.getElementById("drink").innerHTML +=
+                    '<div>'+ element.name+'</div>'
+            }
+            if (element.typeOfPresent === 'Лекарства') {
+                document.getElementById("medicine").innerHTML +=
+                    '<div>'+ element.name+'</div>'
+            }
+            if (element.typeOfPresent === 'Инструменты') {
+                document.getElementById("tools").innerHTML +=
+                    '<div>'+ element.name+'</div>'
+            }
+            if (element.typeOfPresent === 'Другое') {
+                document.getElementById("other").innerHTML +=
+                    '<div>'+ element.name+'</div>'
+            }
+        })
+    }
 
     render() {
         return(
@@ -38,37 +68,29 @@ class Shop extends Component {
                     <thead>Товары</thead>
                     <tbody>
                     <tr>
-                        <td>Оружие</td>
+                        <td>Еда</td>
                         <td>
-                            <section class="card">
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                                <div class="card--content"></div>
-                            </section>
+                            <div id="food"/>
                         </td>
                     </tr>
                     <tr>
-                        <td>Еда</td>
-                        <td></td>
+                        <td>Напитки</td>
+                        <td><div id="drink"/></td>
                     </tr>
                     <tr>
                         <td>Лекарства</td>
-                        <td></td>
+                        <td><div id="medicine"/></td>
+                    </tr>
+                    <tr>
+                        <td>Инструменты</td>
+                        <td><div id="tools"/></td>
                     </tr>
                     <tr>
                         <td>Другое</td>
-                        <td></td>
+                        <td><div id="other"/></td>
                     </tr>
                     </tbody>
                 </table>
-                хм а чё как это делать
             </div>
         );
     }

@@ -11,18 +11,20 @@ constructor(props) {
 }
 
     getGames = () => {
+    let that = this;
         axios({
             method: 'get',
-            url: 'http://localhost:8080/coursework/getgames',
+            url: 'http://localhost:8080/hungergames/game/games_history',
             withCredentials: true
         }).then((res) => {
                 this.setState({
                     games: res.data
                 });
+                this.createGamesTable();
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
-                this.props.history.push('/ss');
+                that.props.history.push('/ss');
             }
         });
     };
@@ -35,20 +37,25 @@ constructor(props) {
         );
     }
 
+    componentDidMount() {
+        this.getGames();
+
+    }
+
     createGamesTable = () => {
+        console.log(this.state.games)
         document.getElementById("gamesTable").innerText = "";
         this.state.games.forEach(function(element) {
             document.getElementById("gamesTable").innerHTML +=
                 '<div> ' +
                 '<table> ' +
-                '<thead>Игра'+ element.id +'</thead> ' +
+                '<thead>Игра '+ element.gameId +'</thead> ' +
                 '<tbody>' +
                 '<tr><td>' +
-                '<table><tr><td>Арена:</td><td>'+element.arena.name+'</td></tr>' +
-                '<tr><td>Победитель:</td><td>'+element.tribute.user.name+'</td></tr>' +
+                '<table><tr><td>Арена:</td><td>'+element.arena.mainLocation.name+'</td></tr>' +
                 '<tr><td>Дата:</td><td>'+element.startDate+'</td></tr>' +
                 '<tr><td>Длительность:</td><td>'+element.duration+'</td></tr>' +
-                '<tr><td>Тип:</td><td>'+element.type+'</td></tr></table>' +
+                '<tr><td>Тип:</td><td>'+element.typeOfGame+'</td></tr></table>' +
                 '</td><td>тут картинка будет</td></tr>' +
                 '</tbody>' +
                 '</table> ' +

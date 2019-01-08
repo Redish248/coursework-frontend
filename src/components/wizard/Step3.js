@@ -27,10 +27,10 @@ class Step3 extends Component {
         formData.set('password', this.state.password);
         formData.set('sex', this.props.sex);
         formData.set('name', this.props.name);
+        formData.set('surname', this.props.surname);
         formData.set('height', this.props.height);
         formData.set('weight', this.props.weight);
         formData.set('birthday', this.props.birthday);
-        formData.set('surname', this.props.surname);
         formData.set('picture', this.props.file);
         axios({
             method: 'post',

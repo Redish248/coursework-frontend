@@ -19,16 +19,13 @@ export default class ShopNavigation extends Component {
                             <NavItem eventKey={1} href="/">
                                 Моя страница
                             </NavItem>
-                            <NavItem eventKey={2} href="/">
-                                На главную
-                            </NavItem>
-                            <NavItem eventKey={3} href="/gamehistory">
+                            <NavItem eventKey={2} href="/gamehistory">
                                 История игр
                             </NavItem>
-                            <NavItem eventKey={4} href="/game">
+                            <NavItem eventKey={3} href="/game">
                                 В игру
                             </NavItem>
-                            <NavItem eventKey={5} href="/">
+                            <NavItem eventKey={4} href="/">
                                 Настройки
                             </NavItem>
                         </Nav>

@@ -6,6 +6,7 @@ import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
 import {Button} from "primereact/components/button/Button";
 import "../styles/UserLK.css";
+import {Modal, OverlayTrigger} from "react-bootstrap";
 
 
  class UserLK extends Component {
@@ -16,7 +17,11 @@ import "../styles/UserLK.css";
              trainings: [],
              games: [],
              user: [],
-             day: 2
+             district: '',
+             status: '',
+             sex: '',
+             day: 2,
+             show: false
          }
      }
 
@@ -46,6 +51,7 @@ import "../styles/UserLK.css";
              data: formData,
              withCredentials: true
          }).then((res) => {
+             console.log(res.data)
              this.setState({
                  trainings: res.data
              });
@@ -59,24 +65,35 @@ import "../styles/UserLK.css";
      };
 
      getUserInfo = () => {
+         let that = this;
          axios({
              method: 'get',
              url: 'http://localhost:8080/hungergames/personal_page',
              withCredentials: true
          }).then((res) => {
                  this.setState({
-                     user: res.data
+                     user: res.data,
+                     district: res.data.district.name,
+                     status: res.data.status.name
                  });
-                 console.log(res.data)
+                 if (this.state.user.sex) {
+                     this.setState ({
+                         sex: 'Женский'
+                     })
+                 } else {
+                     this.setState ({
+                         sex: 'Мужской'
+                     })
+                 }
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
-                 this.props.history.push('/ss');
+                 that.props.history.push('/ss');
              }
          });
      };
 
-     editUser = () => {
+     editUserSend = () => {
          let that = this;
          let formData = new FormData();
          formData.set('password', this.props.password);
@@ -97,10 +114,17 @@ import "../styles/UserLK.css";
          });
      };
 
+     handleClose() {
+         this.setState({ show: false });
+     }
+
+     editUser() {
+         this.setState({ show: true });
+     }
+
      componentDidMount() {
-        //this.getSkills();
-        //this.getUserInfo();
-        //this.getTrainings();
+        this.getSkills();
+        this.getUserInfo();
      }
 
     render() {
@@ -112,43 +136,43 @@ import "../styles/UserLK.css";
                     <tr>
                         <td>
                             <img src="../../public/icon.ico" alt=""/>
-                            <p>Ник: { this.state.user.map(user => <li>{user.nick}</li>)} </p>
+                            <p>Ник: {this.state.user.nick} </p>
                         </td>
                         <td>
+                            <p>Данные о пользователе:</p>
                             <table id="userDataTable">
-                                <thead>Данные о пользователе:</thead>
                                 <tbody>
                                 <tr>
                                     <td>Имя:</td>
-                                    <td>{this.props.name}</td>
+                                    <td>{this.state.user.name}</td>
                                 </tr>
                                 <tr>
                                     <td>Фамилия:</td>
-                                    <td>{this.props.surname}</td>
+                                    <td>{this.state.user.surname}</td>
                                 </tr>
                                 <tr>
                                     <td>Пол:</td>
-                                    <td>{this.props.sex}</td>
+                                    <td>{this.state.sex}</td>
                                 </tr>
                                 <tr>
                                     <td>Дата рождения:</td>
-                                    <td>{this.props.birthday}</td>
+                                    <td>{this.state.user.birthday}</td>
                                 </tr>
                                 <tr>
                                     <td>Рост:</td>
-                                    <td>{this.props.height}</td>
+                                    <td>{this.state.user.height}</td>
                                 </tr>
                                 <tr>
                                     <td>Вес:</td>
-                                    <td>{this.props.weight}</td>
+                                    <td>{this.state.user.weight}</td>
                                 </tr>
                                 <tr>
                                     <td>Дистрикт:</td>
-                                    <td></td>
+                                    <td>{this.state.district}</td>
                                 </tr>
                                 <tr>
                                     <td>Статус:</td>
-                                    <td></td>
+                                    <td>{this.state.status}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -159,8 +183,8 @@ import "../styles/UserLK.css";
                             <div id="resultSkill">
                                 <center>
                                     <DataTable id="skillTable" value={this.state.skills}>
-                                        <Column field="skill_id" header="Название"/>
-                                        <Column field="level_of_skill" header="Коэффициент владения"/>
+                                        <Column field="skill.name" header="Название"/>
+                                        <Column field="levelOfSkill" header="Коэффициент владения"/>
                                     </DataTable>
                                 </center>
                             </div>
@@ -170,6 +194,20 @@ import "../styles/UserLK.css";
                         <td>
                             <p>Ближайшие игры и тренировки:</p>
                             Календарь
+
+                            <Modal show={this.state.show} onHide={this.handleClose}>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Modal heading</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                   <div>kek</div>
+
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button onClick={this.handleClose}>Close</Button>
+                                </Modal.Footer>
+                            </Modal>
+
                         </td>
                     </tr>
                     </tbody>
@@ -179,17 +217,5 @@ import "../styles/UserLK.css";
     }
 }
 
-function mapStateToProps(state)  {
-    return {
-        nick: state.nick,
-        name: state.name,
-        surname: state.surname,
-        sex: state.sex,
-        height: state.height,
-        weight: state.weight,
-        birthday: state.birthday,
-        password: state.password
-    }
-}
 
-export default connect(mapStateToProps)(UserLK);
+export default UserLK;
