@@ -19,8 +19,7 @@ class Step2 extends Component {
             weight: 30,
             height: 150,
             birthday: new Date(),
-            file: '',
-            imagePreviewUrl: ''
+            file: ''
         }
     }
 
@@ -31,7 +30,7 @@ class Step2 extends Component {
     };
 
     clickButton = () => {
-        this.props.signUp2(this.state.sex, this.state.height, this.state.weight, this.state.birthday, this.state.imagePreviewUrl);
+        this.props.signUp2(this.state.sex, this.state.height, this.state.weight, this.state.birthday, this.state.file);
         this.props.goToStep(3);
     };
 
@@ -42,13 +41,15 @@ class Step2 extends Component {
         let file = e.target.files[0];
 
         reader.onloadend = () => {
+
             this.setState({
-                file: file,
-                imagePreviewUrl: reader.result
+                file: reader,
+
             });
         }
 
-        reader.readAsDataURL(file)
+        reader.readAsArrayBuffer(file)
+
     }
 
     render() {

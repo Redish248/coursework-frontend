@@ -65,7 +65,6 @@ class Shop extends Component {
                 <ShopNavigation/>
                 <h2>Магазин</h2>
                 <table>
-                    <thead>Товары</thead>
                     <tbody>
                     <tr>
                         <td>Еда</td>

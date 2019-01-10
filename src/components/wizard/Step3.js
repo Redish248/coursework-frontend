@@ -31,7 +31,7 @@ class Step3 extends Component {
         formData.set('height', this.props.height);
         formData.set('weight', this.props.weight);
         formData.set('birthday', this.props.birthday);
-        formData.set('picture', this.props.file);
+        //formData.set('picture', this.props.file);
         axios({
             method: 'post',
             url: 'http://localhost:8080/hungergames/signup',

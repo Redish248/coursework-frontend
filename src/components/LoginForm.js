@@ -24,12 +24,7 @@ import "../styles/RegPage.css";
     };
 
     clickButton = () => {
-        this.props.signIn(this.state.nick);
-        this.logIn();
-        this.props.history.push('/home');
-    };
-
-     logIn = () => {
+        let that = this;
          let formData = new FormData();
          formData.set('username', this.state.nick);
          formData.set('password', this.state.password);
@@ -39,13 +34,15 @@ import "../styles/RegPage.css";
              data: formData,
              withCredentials: true
          }).then(response => {
+             if (response !== undefined) {
                  this.props.signIn(this.state.nick);
                  this.props.history.push('/home');
                  console.log('login')
              }
+             }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
-                 this.props.history.push('/ss');
+                 that.props.history.push('/ss');
              }
              if (error.response.status === 401) {
                  document.getElementById('error').innerText += "Пользователь не существует!";
