@@ -3,12 +3,13 @@ import ShopNavigation from "./Navigation/ShopNavigation";
 
 import "../styles/Shop.css";
 import * as axios from "axios/index";
+import {Button} from "primereact/components/button/Button";
 
 class Shop extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            products: []
+            products: [],
         }
     }
     getProducts = () => {
@@ -21,7 +22,7 @@ class Shop extends Component {
                 this.setState({
                     products: res.data
                 });
-                this.createProductIcons();
+
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -34,65 +35,91 @@ class Shop extends Component {
         this.getProducts();
     }
 
-    createProductIcons() {
+    createFoodIcons = () => {
+        document.getElementById("products").innerHTML = "";
         this.state.products.forEach(function(element) {
-            if (element.typeOfPresent === 'Еда') {
-                document.getElementById("food").innerHTML +=
-                    '<div>'+ element.name+'</div>'
+            if ((element.typeOfPresent === 'Еда') ) {
+                createProduct(element);
             }
-            if (element.typeOfPresent === 'Напиток') {
-                document.getElementById("drink").innerHTML +=
-                    '<div>'+ element.name+'</div>'
-            }
-            if (element.typeOfPresent === 'Лекарства') {
-                document.getElementById("medicine").innerHTML +=
-                    '<div>'+ element.name+'</div>'
-            }
-            if (element.typeOfPresent === 'Инструменты') {
-                document.getElementById("tools").innerHTML +=
-                    '<div>'+ element.name+'</div>'
-            }
-            if (element.typeOfPresent === 'Другое') {
-                document.getElementById("other").innerHTML +=
-                    '<div>'+ element.name+'</div>'
-            }
+
         })
-    }
+    };
+
+    createDrinkIcons = () => {
+        document.getElementById("products").innerHTML = "";
+        this.state.products.forEach(function(element) {
+            if ((element.typeOfPresent === 'Напиток') ) {
+                createProduct(element);
+            }
+
+        })
+    };
+
+    createMedicineIcons = () =>  {
+        document.getElementById("products").innerHTML = "";
+        this.state.products.forEach(function(element) {
+            if ((element.typeOfPresent === 'Лекарства')  ) {
+                createProduct(element);
+            }
+
+        })
+    };
+
+    createToolsIcons = () => {
+        document.getElementById("products").innerHTML = "";
+        this.state.products.forEach(function(element) {
+            if ((element.typeOfPresent === 'Инструменты')  ) {
+                createProduct(element);
+            }
+
+        })
+    };
+
+    createOthersIcons = () => {
+        document.getElementById("products").innerHTML = "";
+        this.state.products.forEach(function(element) {
+            if ((element.typeOfPresent === 'Другое') ) {
+                createProduct(element);
+            }
+
+        })
+    };
+
 
     render() {
         return(
-            <div>
-                <ShopNavigation/>
+            <div className="shop">
                 <h2>Магазин</h2>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>Еда</td>
-                        <td>
-                            <div id="food"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Напитки</td>
-                        <td><div id="drink"/></td>
-                    </tr>
-                    <tr>
-                        <td>Лекарства</td>
-                        <td><div id="medicine"/></td>
-                    </tr>
-                    <tr>
-                        <td>Инструменты</td>
-                        <td><div id="tools"/></td>
-                    </tr>
-                    <tr>
-                        <td>Другое</td>
-                        <td><div id="other"/></td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                <ShopNavigation/>
+                <p>
+                <Button label="Еда" onClick={this.createFoodIcons}/>
+                <Button label="Напитки" onClick={this.createDrinkIcons}/>
+                <Button label="Лекарства" onClick={this.createMedicineIcons}/>
+                <Button label="Инструменты" onClick={this.createToolsIcons}/>
+                <Button label="Другое" onClick={this.createOthersIcons}/>
+                </p>
+                <div id="products"/>
             </div>
         );
     }
 }
 
 export default Shop;
+
+const createProduct = (element) => {
+    document.getElementById("products").innerHTML +=
+        '<div class="product"><table><tbody><tr>'+
+        '<td>' +
+        'картинка' +
+        '</td><td>' +
+        '<table><tbody>' +
+        '<tr><td>Название:</td><td>' + element.name + '</td></tr>' +
+        '<tr><td>Цена:</td><td>' + element.cost + '</td></tr>' +
+        '<tr><td>Восстановление здоровья</td><td>' + element.healthRecovery + '</td></tr>' +
+        '<tr><td>Описание:</td><td>' + element.description + '</td></tr>' +
+        '</tbody></table>' +
+        '</td></tr></tbody></table>' +
+        '<button>Купить</button>' +
+        '</div> <br/> <br/>'
+}

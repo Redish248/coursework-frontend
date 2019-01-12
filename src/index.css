@@ -6,9 +6,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-header {
   background: url('images/golden.jpg') no-repeat fixed center center;
   background-size: cover;
 }

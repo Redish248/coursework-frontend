@@ -45,7 +45,7 @@ import "../styles/RegPage.css";
                  that.props.history.push('/ss');
              }
              if (error.response.status === 401) {
-                 document.getElementById('error').innerText += "Пользователь не существует!";
+                 document.getElementById('error').innerText = "Неверный логин или пароль!";
              }
          });
      };
@@ -59,6 +59,7 @@ import "../styles/RegPage.css";
                 <InputText value={this.state.nick} onChange={this.handleChange('nick')}/>
                 <h4>Введите пароль:</h4>
                 <Password feedback={false} value={this.state.password} onChange={this.handleChange('password')}/>
+                <div id="error"/>
                 <p><Button label="Войти" onClick={this.clickButton}/></p>
             </div>
         );

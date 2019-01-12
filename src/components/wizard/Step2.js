@@ -64,7 +64,7 @@ class Step2 extends Component {
                 <h4>Пол:</h4>
                 <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
                 <h4>Дата рождения:</h4>
-                <Calendar  monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
+                <Calendar  dateFormat="dd/mm/yy" monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
                 <h4>Рост:</h4>
                 <Spinner  min={100} max={210} value={this.state.height} onChange={this.handleChange('height')} />
                 <h4>Вес:</h4>

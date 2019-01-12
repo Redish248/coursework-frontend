@@ -1,0 +1,29 @@
+.shop {
+    display: inline-block;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(250, 253, 219, 0.9);
+    color: #000000;
+    border: 1px solid blue;
+    filter: alpha(Opacity=70);
+}
+
+.product {
+    text-align: left;
+    width: 700px;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(200, 253, 242, 0.9);
+    color: #000000;
+    border: 1px solid blue;
+    filter: alpha(Opacity=70);
+}
+
+table, button {
+    font-size: 15px;
+}
+
+table td {
+    padding: 4px;
+}

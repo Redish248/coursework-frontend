@@ -1,0 +1,18 @@
+.game {
+    text-align: left;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(250, 253, 219, 0.9);
+    color: #000000;
+    border: 1px solid blue;
+    filter: alpha(Opacity=70);
+}
+
+.game td {
+    padding: 5px;
+}
+
+.head, thead  {
+    font-weight: bold;
+}

@@ -45,7 +45,6 @@ class Step3 extends Component {
                 data: formData,
                 withCredentials: true
             }).then(response => {
-                    sessionStorage.setItem('isAuthorised', 'true');
                     this.props.history.push('/home');
                 }
             );

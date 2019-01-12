@@ -8,8 +8,9 @@ import MainPage from "./components/MainPage";
 import UserLK from "./components/UserLK";
 import GameHistory from "./components/GameHistory";
 import Shop from "./components/Shop";
-import Training from "./components/Training";
 import VisitorGame from "./VisitorGame";
+import GameCalendar from "./components/GameCalendar";
+import Chat from "./components/Chat";
 
 export default () =>
     <Switch>
@@ -18,9 +19,10 @@ export default () =>
         <Route path="/main" component={MainPage}/>
         <Route path="/home" component={UserLK}/>
         <Route path="/gamehistory" component={GameHistory}/>
-        <Route path="/training" component={Training}/>
+        <Route path="/calendar" component={GameCalendar}/>
         <Route path="/shop" component={Shop}/>
         <Route path="/visitorgame" component={VisitorGame}/>
+        <Route path="/chat" component={Chat}/>
         <Route path="/" exact component={Home} />
         <Route component={NotFound} />
     </Switch>;

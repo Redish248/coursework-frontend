@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import UserNavigation from "./Navigation/UserNavigation";
-import {connect} from "react-redux";
 import * as axios from "axios/index";
 import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
 import {Button} from "primereact/components/button/Button";
 import "../styles/UserLK.css";
-import {ButtonToolbar, Modal, ModalBody, ModalFooter, ModalHeader, OverlayTrigger, Popover} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
 import {Password} from "primereact/components/password/Password";
-
+import Training from "./Training";
+import {Messages} from "primereact/components/messages/Messages";
 
  class UserLK extends Component {
      constructor(props) {
@@ -22,11 +22,24 @@ import {Password} from "primereact/components/password/Password";
              status: '',
              sex: '',
              day: 2,
-             modal: false,
              password: '',
-             newPassword: ''
+             newPassword: '',
+             pass: '',
+             show: false,
+             showTr: false,
+             showCurrentTrain: false,
+             showTrainInfo: true,
+             currentTrain: []
          }
      }
+
+     checkPassword = (val) => {
+         if (this.state.newPassword !== val) {
+             document.getElementById('errorPass').innerText = "Пароли не совпадают!";
+         } else {
+             document.getElementById('errorPass').innerText = "";
+         }
+     };
 
 
      handleChange = name => event => {
@@ -35,12 +48,31 @@ import {Password} from "primereact/components/password/Password";
          });
      };
 
+     handleEnd = () => {
+         this.setState({
+             showTr: false,
+             showTrainInfo: true,
+         });
+         if (this.state.showCurrentTrain) {
+             this.setState({
+                 showCurrentTrain: false
+             })
+         }
+     };
+
+     handleShow = () => {
+         this.setState({
+             showTr: true,
+         });
+         this.getTrainings();
+     };
+
 
      handleHide = () => {
          let that = this;
          let formData = new FormData();
-         formData.set('password', this.props.password);
-         formData.set('newPassword', this.props.newPassword);
+         formData.set('password', this.state.password);
+         formData.set('newPassword', this.state.newPassword);
          axios({
              method: 'post',
              url: 'http://localhost:8080/hungergames/edit_user',
@@ -48,18 +80,20 @@ import {Password} from "primereact/components/password/Password";
              withCredentials: true
          }).then((res) => {
                  this.setState({
-                     user: res.data
+                     user: res.data,
+                     show: false,
+                     password: '',
+                     newPassword: '',
+                     pass: ''
                  });
-
-             //this.setState({show: false});
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
                  that.props.history.push('/ss');
              }
 
-             if (error.status === 403) {
-                 console.log('kek')
+             if (error.response.status === 403) {
+                 document.getElementById('error').innerText += "Неверный пароль!";
              }
          });
 
@@ -67,6 +101,7 @@ import {Password} from "primereact/components/password/Password";
 
 
      getSkills = () => {
+         let that = this;
          axios({
              method: 'get',
              url: 'http://localhost:8080/hungergames/get_all_skills',
@@ -78,30 +113,65 @@ import {Password} from "primereact/components/password/Password";
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
-                 this.props.history.push('/ss');
+                 that.props.history.push('/ss');
              }
          });
      };
 
      getTrainings = () => {
-         let formData = new FormData();
-         formData.set('day', this.state.day.toString());
+         let that = this;
+         let url = 'http://localhost:8080/hungergames/trainings?day=' + this.state.day;
          axios({
              method: 'get',
-             url: 'http://localhost:8080/hungergames/trainings',
-             data: formData,
+             url: url,
              withCredentials: true
          }).then((res) => {
              this.setState({
                  trainings: res.data
              });
+             this.createTrainIcons();
              }
          ).catch(function (error) {
              console.log(error);
              if (error === undefined || error.response === undefined) {
-                 this.props.history.push('/ss');
+                 that.props.history.push('/ss');
              }
          });
+
+     };
+
+     createTrainIcons = () => {
+         this.state.trainings.forEach((element) => {
+             document.getElementById("train").innerHTML +=
+                 '<p><table><tbody><tr><td>Название:</td><td>' + element.name + '</td></tr>' +
+                 '<tr><td>Навык:</td><td>' + element.skill.name + '</td></tr>' +
+                 '<tr><td>Коэффициент:</td><td>' + element.coefficient + '</td></tr>' +
+                 '<tr><td>Описание:</td><td>' + element.description + '</td></tr>' +
+                 '<tr><td>Длительность:</td><td>' + element.duration + ' минут</td></tr>' +
+                 '<tr><td>Цена:</td><td>' + element.cost + '</td></tr>' +
+                 '<tr><td rowspan="2"><button id="'+ element.trainingId+'">Посетить</button></td></tr>' +
+                 '</tbody></table></p>';
+         });
+
+         this.state.trainings.forEach((element) => {
+             let button = document.getElementById(element.trainingId );
+             button.onclick = function(){
+                 changeState(element);
+             }
+         });
+
+         const changeState = (element) => {
+             if (this.state.user.cash - element.cost >= 0) {
+                 this.setState({
+                     showCurrentTrain: true,
+                     showTrainInfo: false,
+                     currentTrain: element
+                 });
+             } else {
+                 this.messages.show({severity: 'error', summary: 'Ошибка!', detail: 'Недостаточно средств'});
+             }
+         }
+
      };
 
      getUserInfo = () => {
@@ -136,6 +206,9 @@ import {Password} from "primereact/components/password/Password";
      componentDidMount() {
         this.getSkills();
         this.getUserInfo();
+         this.setState({
+             day: new Date().getDay(),
+         });
      }
 
 
@@ -188,23 +261,17 @@ import {Password} from "primereact/components/password/Password";
                                     <td>Статус:</td>
                                     <td>{this.state.status}</td>
                                 </tr>
+                                <tr>
+                                    <td>Баланс:</td>
+                                    <td>{this.state.user.cash}</td>
+                                </tr>
                                 </tbody>
                             </table>
 
-                            <div className="modal-container" style={{ height: 200 }}>
-                                <Button
-                                    bsStyle="primary"
-                                    bsSize="large"
-                                    onClick={() => this.setState({ show: true })}
-                                    label="Сменить пароль"
-                                />
+                            <div className="modal-container" >
+                                <Button bsstyle="primary" bssize="large" onClick={() => this.setState({ show: true })} label="Сменить пароль"/>
 
-                                <Modal
-                                    show={this.state.show}
-                                    onHide={this.handleHide}
-                                    container={this}
-                                    aria-labelledby="contained-modal-title"
-                                >
+                                <Modal show={this.state.show} onHide={() => this.setState({ show: false })} container={this} aria-labelledby="contained-modal-title">
                                     <Modal.Header closeButton>
                                         <Modal.Title id="contained-modal-title">
                                             Сменить пароль
@@ -213,11 +280,40 @@ import {Password} from "primereact/components/password/Password";
                                     <Modal.Body>
                                        <p>Старый пароль:</p>
                                         <Password value={this.state.password} onChange={this.handleChange('password')}/>
+                                        <div id="error"/>
                                         <p>Новый пароль:</p>
                                         <Password value={this.state.newPassword} onChange={this.handleChange('newPassword')}/>
+                                        <p>Повторите пароль:</p>
+                                        <Password value={this.state.pass} onChange={(e) => {this.setState({pass: e.target.value}); this.checkPassword(e.target.value);}}/>
+                                        <div id="errorPass"/>
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button onClick={this.handleHide} label="Сохранить"/>
+                                    </Modal.Footer>
+                                </Modal>
+
+                                <br/>
+
+                                <Button bsstyle="primary" bssize="large" onClick={this.handleShow} label="Пойти на тренировку"/>
+                                <Modal show={this.state.showTr} onHide={() => this.setState({ showTr: false })}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title>Тренировки</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                        <Messages ref={(el) => this.messages = el} />
+                                        {
+                                            this.state.showTrainInfo
+                                            ? <div id="train"/>
+                                                : null
+                                        }
+                                        {
+                                            this.state.showCurrentTrain
+                                                ? <Training train={this.state.currentTrain} finish={() => {document.getElementById('finish').click()}}/>
+                                                : null
+                                        }
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button id ="finish" onClick={this.handleEnd} label="Закрыть"/>
                                     </Modal.Footer>
                                 </Modal>
                             </div>
@@ -236,8 +332,8 @@ import {Password} from "primereact/components/password/Password";
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <p>Ближайшие игры и тренировки:</p>
+                        <td rowSpan="3">
+                            <p>Календарь игр:</p>
                             Календарь
 
                         </td>
