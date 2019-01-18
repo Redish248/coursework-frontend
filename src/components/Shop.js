@@ -113,7 +113,7 @@ const createProduct = (element) => {
         '<td>' +
         'картинка' +
         '</td><td>' +
-        '<table><tbody>' +
+        '<table class="infoProduct"><tbody>' +
         '<tr><td>Название:</td><td>' + element.name + '</td></tr>' +
         '<tr><td>Цена:</td><td>' + element.cost + '</td></tr>' +
         '<tr><td>Восстановление здоровья</td><td>' + element.healthRecovery + '</td></tr>' +

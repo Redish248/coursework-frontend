@@ -10,7 +10,6 @@ import {Button} from "primereact/components/button/Button";
 import {connect} from "react-redux";
 import {signUp2} from "../../actions/actions";
 
-
 class Step2 extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +18,7 @@ class Step2 extends Component {
             weight: 30,
             height: 150,
             birthday: new Date(),
-            file: ''
+            file: null
         }
     }
 
@@ -34,23 +33,9 @@ class Step2 extends Component {
         this.props.goToStep(3);
     };
 
-    _handleImageChange(e) {
-        e.preventDefault();
-
-        let reader = new FileReader();
-        let file = e.target.files[0];
-
-        reader.onloadend = () => {
-
-            this.setState({
-                file: reader,
-
-            });
-        }
-
-        reader.readAsArrayBuffer(file)
-
-    }
+    fileChangedHandler = (event) => {
+        this.setState({file: event.target.files[0]})
+    };
 
     render() {
         return(
@@ -58,9 +43,7 @@ class Step2 extends Component {
                 <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
                 <h4>Аватар:</h4>
-                <input className="fileInput"
-                       type="file"
-                       onChange={(e)=>this._handleImageChange(e)} />
+                <input type="file" onChange={this.fileChangedHandler}/>
                 <h4>Пол:</h4>
                 <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
                 <h4>Дата рождения:</h4>
@@ -86,7 +69,7 @@ function mapStateToProps(state)  {
         birthday: state.birthday,
         weight: state.weight,
         height: state.height,
-        file: state.imagePreviewUrl
+        file: state.file
     }
 }
 

@@ -20,10 +20,10 @@
     filter: alpha(Opacity=70);
 }
 
-table, button {
+.infoProduct, button {
     font-size: 15px;
 }
 
-table td {
+.infoProduct td {
     padding: 4px;
 }

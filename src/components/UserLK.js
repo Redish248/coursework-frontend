@@ -195,6 +195,8 @@ import {Messages} from "primereact/components/messages/Messages";
                          sex: 'Мужской'
                      })
                  }
+                 document.getElementById("ItemPreview").src = "data:image/png;base64," + this.state.user.picture
+
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
@@ -222,7 +224,7 @@ import {Messages} from "primereact/components/messages/Messages";
                     <tbody>
                     <tr>
                         <td>
-                            <img src={""} alt=""/>
+                            <img id="ItemPreview" src="" alt="" />
                             <p>Ник: {this.state.user.nick} </p>
                         </td>
                         <td>

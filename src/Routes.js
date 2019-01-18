@@ -8,9 +8,11 @@ import MainPage from "./components/MainPage";
 import UserLK from "./components/UserLK";
 import GameHistory from "./components/GameHistory";
 import Shop from "./components/Shop";
-import VisitorGame from "./VisitorGame";
-import GameCalendar from "./components/GameCalendar";
+import VisitorGame from "./components/VisitorGame";
 import Chat from "./components/Chat";
+import GameTribute from "./components/GameTribute";
+import AdminGame from "./components/AdminGame";
+import CreateGame from "./components/CreateGame";
 
 export default () =>
     <Switch>
@@ -18,10 +20,12 @@ export default () =>
         <Route path="/signup" exact component={RegPage}/>
         <Route path="/main" component={MainPage}/>
         <Route path="/home" component={UserLK}/>
+        <Route path="/game" component={GameTribute}/>
+        <Route path="/adminGame" component={AdminGame}/>
         <Route path="/gamehistory" component={GameHistory}/>
-        <Route path="/calendar" component={GameCalendar}/>
+        <Route path="/createGame" component={CreateGame}/>
         <Route path="/shop" component={Shop}/>
-        <Route path="/visitorgame" component={VisitorGame}/>
+        <Route path="/visitorGame" component={VisitorGame}/>
         <Route path="/chat" component={Chat}/>
         <Route path="/" exact component={Home} />
         <Route component={NotFound} />
