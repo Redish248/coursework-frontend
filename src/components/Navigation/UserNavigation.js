@@ -38,7 +38,7 @@ class UserNavigation extends Component {
                                 История игр
                             </NavItem>
                             <NavItem eventKey={3} href="/training">
-                                Тренировка
+                               delete
                             </NavItem>
                             <NavItem eventKey={4} href="/settings">
                                 Настройки

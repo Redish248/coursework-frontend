@@ -9,8 +9,7 @@ import UserLK from "./components/UserLK";
 import GameHistory from "./components/GameHistory";
 import Shop from "./components/Shop";
 import VisitorGame from "./components/VisitorGame";
-import Chat from "./components/Chat";
-import GameTribute from "./components/GameTribute";
+import GameTribute from "./components/game/GameTribute";
 import AdminGame from "./components/AdminGame";
 import CreateGame from "./components/CreateGame";
 
@@ -26,7 +25,6 @@ export default () =>
         <Route path="/createGame" component={CreateGame}/>
         <Route path="/shop" component={Shop}/>
         <Route path="/visitorGame" component={VisitorGame}/>
-        <Route path="/chat" component={Chat}/>
         <Route path="/" exact component={Home} />
         <Route component={NotFound} />
     </Switch>;

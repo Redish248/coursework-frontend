@@ -33,7 +33,8 @@ class Chat extends Component {
     render() {
         return(
             <div>
-                <div id="msg" style={{height: 300, width: 500, backgroundColor: 'white', overflowY: 'scroll'}}/>
+                <h3>Чат:</h3>
+                <div id="msg" style={{height: 200, width: 1000, backgroundColor: 'white', overflowY: 'scroll'}}/>
                 <p><InputText value={this.state.message} onChange={this.handleChange('message')}/></p>
 
                 <Button label="Отправить" onClick={this.emit} />
