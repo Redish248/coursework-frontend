@@ -28,8 +28,10 @@ class Step2 extends Component {
         });
     };
 
+
+
     clickButton = () => {
-        this.props.signUp2(this.state.sex, this.state.height, this.state.weight, this.state.birthday, this.state.file);
+        this.props.signUp2(this.state.sex, this.state.height, this.state.weight,  this.state.birthday.getTime(), this.state.file);
         this.props.goToStep(3);
     };
 

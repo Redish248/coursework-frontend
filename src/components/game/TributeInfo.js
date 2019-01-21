@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import {ProgressBar} from "primereact/components/progressbar/ProgressBar";
 
 class TributeInfo extends Component {
+
+    //TODO: web socket и сюда данные передавать надо
     constructor(props) {
         super(props);
         this.state = {

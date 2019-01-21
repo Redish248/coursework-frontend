@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
+import "../../styles/WeaponsAndPresents.css";
 
 class Presents extends Component {
     //TODO: web socket на получение подарка и обновление их
@@ -34,14 +35,18 @@ class Presents extends Component {
         });
     };
 
-    //TODO: tooltip на тип, описание и восстановление чего и сколько
     createPresentIcons = () => {
         document.getElementById('presentTable').innerHTML = "";
         this.state.presents.forEach(function (element) {
             document.getElementById('presentTable').innerHTML +=
                 "<td>" +
                 "picture" +
-                element.present.name +
+                '<div class="tooltip1">' + element.product.name +'<span class="tooltiptext1">' +
+                'Тип: ' + element.product.typeOfPresent +
+                'Описание: ' + element.product.description +
+                'Восстанавливает: ' + element.product.typeOfRecovery +
+                'Коэффициент: ' + element.product.healthRecovery +
+                '</span></div>' +
                 "</td>"
         });
 

@@ -22,7 +22,7 @@ class Shop extends Component {
                 this.setState({
                     products: res.data
                 });
-
+            this.createFoodIcons();
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -109,7 +109,8 @@ export default Shop;
 
 const createProduct = (element) => {
     document.getElementById("products").innerHTML +=
-        '<div class="product"><table><tbody><tr>'+
+
+        '<div class="product"><table><tbody><tr>' +
         '<td>' +
         'картинка' +
         '</td><td>' +
@@ -122,4 +123,5 @@ const createProduct = (element) => {
         '</td></tr></tbody></table>' +
         '<button>Купить</button>' +
         '</div> <br/> <br/>'
-}
+
+};

@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
+import "../../styles/WeaponsAndPresents.css";
 
 class Weapons extends Component {
     //FIXME: тут связь между weapon и weaponInGame плохо прописана
     //TODO: а отдельно ли это от игры?
+    //FIXME: проверить названия полей таблиц у оружия и подарков
     constructor(props) {
         super(props);
         this.state = {
@@ -56,14 +58,17 @@ class Weapons extends Component {
         });
     };
 
-    //TODO: tooltip на радиус действия, тип и урон
     createWeaponIcons = () => {
         document.getElementById('weaponTable').innerHTML = "";
         this.state.weapons.forEach(function(element) {
             document.getElementById('weaponTable').innerHTML +=
                 "<td>" +
                 "<img src={} >" +
-                element.weapon.name +
+                '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
+                'Радиус действия: ' + element.radiusOfAction +
+                'Тип: ' + element.typeOfWeapon +
+                'Урон: ' + element.damage +
+                '</span></div>' +
                 "</td>"
 
         });

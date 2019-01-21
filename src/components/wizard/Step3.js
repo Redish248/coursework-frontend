@@ -30,6 +30,7 @@ class Step3 extends Component {
         formData.set('surname', this.props.surname);
         formData.set('height', this.props.height);
         formData.set('weight', this.props.weight);
+        alert(this.props.birthday)
         formData.set('birthday', this.props.birthday);
         if (this.props.file !== null) {
             formData.append('file', this.props.file, this.props.file.name)
