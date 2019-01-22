@@ -40,8 +40,8 @@ class UserNavigation extends Component {
                             <NavItem eventKey={3} href="/createGame">
                                 Создание игры
                             </NavItem>
-                            <NavItem eventKey={4} href="/settings">
-                                Настройки
+                            <NavItem eventKey={4} href="/adminGame">
+                                Перейти в игру
                             </NavItem>
                         </Nav>
                         <Nav pullRight>

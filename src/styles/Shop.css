@@ -10,7 +10,7 @@
 
 .product {
     text-align: left;
-    width: 700px;
+    width: 500px;
     display: inline-block;
     padding: 20px;
     border-radius: 15px;
@@ -26,6 +26,11 @@
 
 .infoProduct td {
     padding: 4px;
+}
+
+.shopImg {
+    width:  150px;
+    height: 150px;
 }
 
 

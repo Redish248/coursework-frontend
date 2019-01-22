@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import UserNavigation from "./Navigation/UserNavigation";
 import * as axios from "axios/index";
 import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
@@ -9,6 +8,9 @@ import {Modal} from "react-bootstrap";
 import {Password} from "primereact/components/password/Password";
 import Training from "./Training";
 import {Messages} from "primereact/components/messages/Messages";
+import VisitorNavigation from "./Navigation/VisitorNavigation";
+import AdminNavigation from "./Navigation/AdminNavigation";
+import TributeNavigation from "./Navigation/TributeNavigation";
 
  class UserLK extends Component {
      constructor(props) {
@@ -219,7 +221,21 @@ import {Messages} from "primereact/components/messages/Messages";
         let date = dateB.getDate() + '-' + (dateB.getMonth()+ 1) + '-' +  dateB.getFullYear();
         return(
             <div className="userLK">
-                <UserNavigation/>
+                {
+                    this.state.status === "Наблюдатель"
+                        ? <VisitorNavigation/>
+                        : null
+                }
+                {
+                    this.state.status === "Распорядитель"
+                        ? <AdminNavigation/>
+                        : null
+                }
+                {
+                    this.state.status === "Трибут"
+                        ? <TributeNavigation/>
+                        : null
+                }
                 <table id="mainTable">
                     <tbody>
                     <tr>
@@ -331,13 +347,6 @@ import {Messages} from "primereact/components/messages/Messages";
                                     </DataTable>
                                 </center>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td rowSpan="3">
-                            <p>Календарь игр:</p>
-                            Календарь
-
                         </td>
                     </tr>
                     </tbody>

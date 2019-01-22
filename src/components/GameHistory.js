@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import UserNavigation from "./Navigation/UserNavigation";
+import UserNavigation from "./Navigation/TributeNavigation";
 import * as axios from "axios";
 
 import "../styles/GameHistory.css";
@@ -44,6 +44,7 @@ constructor(props) {
         this.getGames();
     }
 
+    //TODO: победителя добавить
     createGamesTable = () => {
         document.getElementById("gamesTable").innerText = "";
         this.state.games.forEach(function(element) {
@@ -67,11 +68,12 @@ constructor(props) {
                     '<tr><td class="head">Дата:</td><td>'+date+'</td></tr>' +
                     '<tr><td class="head">Длительность:</td><td>'+element.duration+' дней</td></tr>' +
                     '<tr><td class="head">Распорядитель:</td><td>'+element.steward.nick+'</td></tr>' +
+                    '<tr><td class="head">Победитель:</td><td>'+element.steward.nick+'</td></tr>' +
                 '</table>' +
-                '</td><td>тут картинка будет</td></tr>' +
+                '</td><td><img class="gameHistImg" id="'+ element.gameId + '" src="data:image/png;base64,' + element.arena.mainLocation.picture +'" alt=""/></td></tr>' +
                 '</tbody>' +
                 '</table> ' +
-                '</div><br/><br/>'
+                '</div><br/><br/>';
         })
     }
 }

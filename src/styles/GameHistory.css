@@ -16,3 +16,8 @@
 .head, thead  {
     font-weight: bold;
 }
+
+.gameHistImg {
+    width: 250px;
+    height: 210px;
+}
