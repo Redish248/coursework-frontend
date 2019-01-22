@@ -5,6 +5,7 @@ import {Calendar} from "primereact/components/calendar/Calendar";
 import {Dropdown} from "primereact/components/dropdown/Dropdown";
 import AdminNavigation from "./Navigation/AdminNavigation";
 import {Button} from "primereact/components/button/Button";
+import Notification from "./Notification";
 
 class CreateGame extends Component {
     constructor(props) {
@@ -74,6 +75,7 @@ class CreateGame extends Component {
                 <Calendar  inline={true} dateFormat="dd/mm/yy" minDate={today} maxDate={maxDate} value={this.state.date} onChange={this.handleChange('date')}/>
 
                 <p><Button label="Создать игру" onClick={this.createGame}/></p>
+                <Notification/>
             </div>
         );
     }

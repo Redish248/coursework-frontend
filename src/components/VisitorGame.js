@@ -5,6 +5,7 @@ import {Button} from "primereact/components/button/Button";
 import UserNavigation from "./Navigation/TributeNavigation";
 import {Modal} from "react-bootstrap";
 import Shop from "./Shop";
+import Notification from "./Notification";
 
 class VisitorGame extends Component {
     constructor(props) {
@@ -82,6 +83,7 @@ class VisitorGame extends Component {
                     </tr>
                     </tbody>
                 </table>
+                <Notification/>
             </div>
         );
     }

@@ -1,43 +1,58 @@
 import React, { Component } from "react";
-import {InputText} from "primereact/components/inputtext/InputText";
-import {Button} from "primereact/components/button/Button";
+import SockJsClient from 'react-stomp';
+import { TalkBox } from "react-talk";
 
 
 class Chat extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            message: 'Hello'
+            clientConnected: false,
+            messages: []
         };
-        this.socket = new WebSocket('ws://localhost:8080');
     }
 
-    handleChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
+    onMessageReceive = (msg) => {
+        let message = {
+            authorId: msg.sender,
+            author: msg.sender,
+            message: msg.content,
+            timestamp: msg.time
+        };
+        this.setState(prevState => ({
+            messages: [...prevState.messages, message]
+        }));
     };
 
-    emit() {
-        this.setState(prevState => ({
-            open: !prevState.open
-        }));
-        this.socket.send("It worked!")
-    }
-
-    componentDidMount() {
-        this.socket.onopen = () => this.socket.send(JSON.stringify({name: 'ira', message: this.state.message}));
-        this.socket.onmessage = ({data}) => console.log(data);
-    }
+    sendMessage = (msg) => {
+        //"sender" must be name of user
+        try {
+            let usrMsg = {
+                content: msg,
+                sender: "anon",
+                time: new Date().getTime()
+            };
+            this.clientRef.sendMessage("/app/hungergames/chat", JSON.stringify(usrMsg));
+            return true;
+        } catch(e) {
+            return false;
+        }
+    };
 
     render() {
-        return(
+        return (
             <div>
-                <h3>Чат:</h3>
-                <div id="msg" style={{height: 200, width: 1000, backgroundColor: 'white', overflowY: 'scroll'}}/>
-                <p><InputText value={this.state.message} onChange={this.handleChange('message')}/></p>
+                {/*тут в штуках с user тоже надо вставить ник*/}
+                <TalkBox topic="Чат" currentUserId='anon'
+                         currentUser='anon' messages={ this.state.messages }
+                         onSendMessage={ this.sendMessage } connected={ this.state.clientConnected }/>
 
-                <Button label="Отправить" onClick={this.emit} />
+
+                <SockJsClient url='http://localhost:8080/ws' topics={["/topic/chat"]}
+                              onMessage={ this.onMessageReceive } ref={ (client) => { this.clientRef = client }}
+                              onConnect={ () => { this.setState({ clientConnected: true }) } }
+                              onDisconnect={ () => { this.setState({ clientConnected: false }) } }
+                              debug={ false }/>
             </div>
         );
     }

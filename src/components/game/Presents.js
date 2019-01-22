@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
 import "../../styles/WeaponsAndPresents.css";
+import SockJsClient from "react-stomp";
 
 class Presents extends Component {
     //TODO: web socket на получение подарка и обновление их
@@ -52,6 +53,10 @@ class Presents extends Component {
 
     };
 
+    onMessageReceive = (msg) => {
+        //добавить подарок
+    };
+
     render() {
         return(
             <div>
@@ -63,6 +68,9 @@ class Presents extends Component {
                         </tbody>
                     </table>
                 </div>
+                <SockJsClient url='http://localhost:8080/ws' topics={["/user/queue/presents"]}
+                              onMessage={ this.onMessageReceive }
+                              debug={ false }/>
             </div>
         );
     }

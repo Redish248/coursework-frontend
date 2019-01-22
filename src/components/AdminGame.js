@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Notification from "./Notification";
 
 class AdminGame extends Component {
     constructor(props) {
@@ -19,6 +20,8 @@ class AdminGame extends Component {
         return(
             <div>
                 а чё тут вообще
+                Как у зрителя + вставка ловушек
+                <Notification/>
             </div>
         );
     }

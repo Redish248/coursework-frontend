@@ -11,6 +11,7 @@ import {Messages} from "primereact/components/messages/Messages";
 import VisitorNavigation from "./Navigation/VisitorNavigation";
 import AdminNavigation from "./Navigation/AdminNavigation";
 import TributeNavigation from "./Navigation/TributeNavigation";
+import Notification from "./Notification";
 
  class UserLK extends Component {
      constructor(props) {
@@ -351,6 +352,7 @@ import TributeNavigation from "./Navigation/TributeNavigation";
                     </tr>
                     </tbody>
                 </table>
+                <Notification/>
             </div>
         );
     }

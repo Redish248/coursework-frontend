@@ -3,6 +3,7 @@ import TributeInfo from "./TributeInfo";
 import Chat from "./Chat";
 import Weapons from "./Weapons";
 import Presents from "./Presents";
+import Notification from "../Notification";
 
 class GameTribute extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class GameTribute extends Component {
                     <tr><td colSpan="2"><Chat/></td></tr>
                     </tbody>
                 </table>
+                <Notification/>
             </div>
         );
     }

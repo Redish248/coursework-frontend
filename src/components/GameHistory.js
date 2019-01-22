@@ -3,6 +3,7 @@ import UserNavigation from "./Navigation/TributeNavigation";
 import * as axios from "axios";
 
 import "../styles/GameHistory.css";
+import Notification from "./Notification";
 
 class GameHistory extends Component {
 constructor(props) {
@@ -36,6 +37,7 @@ constructor(props) {
             <div>
                 <UserNavigation/>
                 <div id="gamesTable"/>
+                <Notification/>
             </div>
         );
     }
