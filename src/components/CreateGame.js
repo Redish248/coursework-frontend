@@ -6,6 +6,7 @@ import {Dropdown} from "primereact/components/dropdown/Dropdown";
 import AdminNavigation from "./Navigation/AdminNavigation";
 import {Button} from "primereact/components/button/Button";
 import Notification from "./Notification";
+import {Messages} from 'primereact/messages';
 
 class CreateGame extends Component {
     constructor(props) {
@@ -29,9 +30,9 @@ class CreateGame extends Component {
         let that = this;
         let formData = new FormData();
         formData.set('typeOfGame', this.state.type);
-        formData.set('length', this.props.length);
+        formData.set('length', this.state.length);
         formData.set('width', this.state.width);
-        formData.set('startDate', this.state.date);
+        formData.set('startDate', this.state.date.getTime());
         formData.set('locationName', this.state.location);
         axios({
             method: 'post',
@@ -39,9 +40,14 @@ class CreateGame extends Component {
             data: formData,
             withCredentials: true
         }).then((res) => {
-                this.setState({
-                    game: res.data
-                });
+                if (res.data.gameId===undefined){
+                    //FIXME: тоже под хедером не видно
+                    this.messages.show({sticky: true, severity: 'error', summary: 'Ошибка', detail: res.data});
+                } else {
+                    this.setState({
+                        game: res.data
+                    });
+                }
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -61,6 +67,7 @@ class CreateGame extends Component {
 
         return(
             <div>
+                <Messages ref={(el) => this.messages = el}></Messages>
                 <AdminNavigation/>
                 <h2>Параметры игры:</h2>
                 <p>Тип игры:</p>
