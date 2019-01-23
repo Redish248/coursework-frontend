@@ -15,21 +15,9 @@ class GameTribute extends Component {
             tribute: [],
             game: [],
             weaponToAdd: [],
-            tributeLocation: [],
-            map: [],
             user: [],
         })
     }
-
-    createMap = () => {
-        this.state.trainings.forEach((element) => {
-
-        })
-    };
-
-    addOnePart = () => {
-
-    };
 
     getUserInfo = () => {
         let that = this;
@@ -50,7 +38,6 @@ class GameTribute extends Component {
         });
 
     };
-
 
     getGame = () => {
         let that = this;

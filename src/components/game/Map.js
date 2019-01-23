@@ -3,6 +3,7 @@ import * as axios from "axios";
 import SockJsClient from "react-stomp";
 import PointImg from "../../images/user.png";
 import WeaponImg from "../../images/weapon.png"
+import TributeImg from "../../images/tribute.png";
 
 class Map extends Component {
     constructor(props) {
@@ -14,25 +15,25 @@ class Map extends Component {
             tributes: [],
             curX: 4,
             curY: 4,
-            direction: ''
+            direction: '',
+            nick: '',
+            gameId: 0
         }
 
     }
 
-    move() {
+    tributeInfo(){
         let that = this;
-        let formData = new FormData();
-        formData.set('nick', this.props.nick);
-        formData.set('x', this.state.curX);
-        formData.set('y', this.state.curY);
         axios({
-            method: 'post',
-            url: 'http://localhost:8080/hungergames/game/get_map',
-            data: formData,
+            method: 'get',
+            url: 'http://localhost:8080/hungergames/game/tribute                                                   ',
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    weapons: res.data
+                    nick: res.data.user.nick,
+                    curX: res.data.locationX,
+                    curY: res.data.locationY,
+                    gameId: res.data.gameId
                 });
             }
         ).catch(function (error) {
@@ -42,18 +43,59 @@ class Map extends Component {
         });
     }
 
-    onMessageReceive = (msg) => {
-        let r = 3;
-        let newTributes = [];
-        this.state.tributes.forEach(function (item) {
-            if (item.nick !== msg.nick) {
-                newTributes[newTributes.length - 1] = item;
+    move(curX, curY) {
+        let that = this;
+        let formData = new FormData();
+        formData.set('nick', '');
+        formData.set('x', curX);
+        formData.set('y', curY);
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/hungergames/game/move                                                   ',
+            data: formData,
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    weapons: res.data
+                });
+                this.drawWeapon(curX, curY, res.data)
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
             }
         });
-        if (msg.x >= (this.state.curX - r) && msg.x <= (this.state.curX + r) && msg.y >= (this.state.curY - r) && msg.y <= (this.state.curY + r)) {
-            this.setState(prevState => ({
-                tributes: [...prevState.messages, msg]
-            }));
+    }
+
+    onMessageReceive = (msg) => {
+        let index = -1;
+        console.log(msg.nick+" "+msg.x+" "+msg.y);
+        if (msg.nick!==this.state.nick) {
+            for (let i = 0; i < this.state.tributes.length; i++) {
+                if (this.state.tributes[i].nick === msg.nick) {
+                    index = i;
+                }
+            }
+            let newState = this.state.tributes;
+            if (index === -1) {
+                this.setState(prevState => ({
+                    tributes: [...prevState.tributes, msg]
+                }));
+                newState[newState.length] = msg;
+            } else {
+                newState[index] = msg;
+                this.setState({
+                    tributes: newState
+                });
+            }
+            /*if (msg.x > (this.state.curX - 4) && msg.x < (this.state.curX + 4) && msg.y > (this.state.curY - 4) && msg.y < (this.state.curY + 4)) {
+                let tributesImg = new Image();
+                tributesImg.onload = function () {
+                    ctx.drawImage(tributesImg, 330+(msg.x-st.curX)*imgSize,330+(msg.y-st.curY)*imgSize, 40, 40);
+
+                };
+                tributesImg.src = TributeImg;
+            }*/
         }
     };
 
@@ -105,7 +147,45 @@ class Map extends Component {
         });
     };
 
+    drawWeapon(curX, curY, weapons){
+        let imgSize = 100;
+        let xStart = 4, yStart = 4;
+        const canvas = this.refs.map;
+        const ctx = canvas.getContext("2d");
+        weapons.forEach(function (element) {
+            if (curX===element.locationX && curY===element.locationY){
+                /*let that = this;
+                let formData = new FormData();
+                formData.set('game', this.state.game.gameId);
+                formData.set('weapon', element.weapon.name);
+                axios({
+                    method: 'post',
+                    url: 'http://localhost:8080/hungergames/game/add_weapon',
+                    data: formData,
+                    withCredentials: true
+                }).then((res) => {
+                    }
+                ).catch(function (error) {
+                    if (error === undefined || error.response === undefined) {
+                        that.props.history.push('/ss');
+                    }
+                });*/
+            } else {
+                let img = new Image();
+                let x = element.locationX * imgSize;
+                let y = element.locationY * imgSize;
+                console.log(x + " " + y);
+                img.onload = function () {
+                    ctx.drawImage(img, x - (curX - xStart + 1) * imgSize, y - (curY - yStart + 1) * imgSize, imgSize / 2, imgSize / 2);
+                };
+                img.src = WeaponImg;
+            }
+        });
+    }
+
+
     moveCanvas = (curX, curY) => {
+        let st = this.state;
         let imgSize = 100;
         let xStart = 4, yStart = 4;
         let loc = this.state.locations;
@@ -122,14 +202,25 @@ class Map extends Component {
         });
         let userImg = new Image();
         userImg.onload = function () {
-            ctx.drawImage(userImg, 330,330,40,40);
+            ctx.drawImage(userImg, 330, 330, 40, 40);
         };
         userImg.src = PointImg;
-
+        this.move(curX, curY);
+        this.state.tributes.forEach(function (tribute) {
+            if (tribute.x > (st.curX - xStart) && tribute.x < (st.curX + xStart) && tribute.y > (st.curY - yStart) && tribute.y < (st.curY + yStart)) {
+                let tributesImg = new Image();
+                tributesImg.onload = function () {
+                    ctx.drawImage(tributesImg, 330 + (tribute.x - st.curX) * imgSize, 330 + (tribute.y - st.curY) * imgSize, 40, 40);
+                };
+                tributesImg.src = TributeImg;
+            }
+        });
     };
+
 
     componentDidMount() {
         this.getMap();
+        this.tributeInfo();
     }
 
 

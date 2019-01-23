@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {ProgressBar} from "primereact/components/progressbar/ProgressBar";
 import SockJsClient from "react-stomp";
+import * as axios from "axios";
 
 class TributeInfo extends Component {
 
@@ -22,6 +23,29 @@ class TributeInfo extends Component {
             thirst: msg.thirst
         });
     };
+
+    tributeHealth(){
+        let that = this;
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/hungergames/game/health                                                  ',
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    weapons: res.data
+                });
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    }
+
+    componentDidMount(){
+        this.tributeHealth();
+    }
+
 
     render() {
         return(
