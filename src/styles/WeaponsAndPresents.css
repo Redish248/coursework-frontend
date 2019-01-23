@@ -6,7 +6,7 @@
 
 .tooltip1 .tooltiptext1 {
     visibility: hidden;
-    width: 200px;
+    width: 250px;
     background-color: #555;
     color: #fff;
     text-align: center;
@@ -37,7 +37,19 @@
     opacity: 1;
 }
 
+.tooltip1 {
+    font-size: 15px;
+}
+
+.tooltiptext1 {
+    font-size: 7px;
+}
+
 .weaponImg {
     width: 80px;
     height: 80px;
+}
+
+#presents, #weaponTable {
+    padding: 20px;
 }

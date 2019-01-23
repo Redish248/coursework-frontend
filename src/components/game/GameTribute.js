@@ -6,6 +6,7 @@ import Presents from "./Presents";
 import Notification from "../Notification";
 import * as axios from "axios/index";
 import GameNavigation from "../Navigation/GameNavigation";
+import Map from "./Map";
 
 class GameTribute extends Component {
     constructor(props) {
@@ -104,7 +105,7 @@ class GameTribute extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><canvas ref="map" width={700} height={600} /></td>
+                        <td><Map/></td>
                         <td>
                             <table>
                                 <tbody>
@@ -112,10 +113,10 @@ class GameTribute extends Component {
                                     <TributeInfo/>
 
                                 </td></tr>
-                                <tr><td id="weapons">
+                                <tr><td >
                                    <Weapons weaponToAdd={this.state.weaponToAdd}/>
                                 </td></tr>
-                                <tr><td id="presents">
+                                <tr><td >
                                    <Presents/>
                                 </td></tr>
                                 </tbody>

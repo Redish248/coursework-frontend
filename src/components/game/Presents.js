@@ -84,11 +84,11 @@ class Presents extends Component {
                 "<td>" +
                 "<img class='weaponImg' id='imgP" +element.sendingId +"' src='' alt='' >" +
                 '<div class="tooltip1">' + element.product.name +'<span class="tooltiptext1">' +
-                'Тип: ' + element.product.typeOfPresent +
-                'Описание: ' + element.product.description +
-                'Восстанавливает: ' + element.product.typeOfRecovery +
-                'Коэффициент: ' + element.product.healthRecovery +
-                '</span></div>' +
+                '<p>Тип: ' + element.product.typeOfPresent +
+                '</p><p>Описание: ' + element.product.description +
+                '</p><p>Восстанавливает: ' + element.product.typeOfRecovery +
+                '</p><p>Коэффициент: ' + element.product.healthRecovery +
+                '</p></span></div>' +
                 "</td>"
         });
         this.state.presents.forEach((element) => {
@@ -129,7 +129,7 @@ class Presents extends Component {
         return(
             <div>
                 <h3>Мои подарки</h3>
-                <div id="presents" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}>
+                <div id="presents" style={{height: 170, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}>
                     <table>
                         <tbody>
                         <tr id="presentTable"/>

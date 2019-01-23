@@ -91,10 +91,10 @@ class Weapons extends Component {
                 "<td>" +
                 "<img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' >" +
                 '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
-                'Радиус действия: ' + element.radiusOfAction +
-                'Тип: ' + element.typeOfWeapon +
-                'Урон: ' + element.damage +
-                '</span></div>' +
+                '<p>Радиус действия: ' + element.weapon.radiusOfAction +
+                '</p><p>Тип: ' + element.weapon.typeOfWeapon +
+                '</p><p>Урон: ' + element.weapon.damage +
+                '</p></span></div>' +
                 "</td>"
 
         });
