@@ -5,7 +5,7 @@ import * as axios from "axios/index";
 import {signOut} from "../../actions/actions";
 import {connect} from "react-redux";
 
-class TributeNavigation extends Component {
+class GameNavigation extends Component {
 
     handleLogOut = (event) => {
         axios.post('http://localhost:8080/logout')
@@ -37,9 +37,6 @@ class TributeNavigation extends Component {
                             <NavItem eventKey={2} href="/gamehistory">
                                 История игр
                             </NavItem>
-                            <NavItem eventKey={3} href="/game">
-                               Перейти в игру
-                            </NavItem>
                         </Nav>
                         <Nav pullRight>
                             <NavItem eventKey={1} href="/" onClick={this.handleLogOut}>
@@ -59,5 +56,5 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(null,mapDispatchToProps )(TributeNavigation);
+export default connect(null,mapDispatchToProps)(GameNavigation);
 

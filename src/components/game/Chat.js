@@ -25,11 +25,10 @@ class Chat extends Component {
     };
 
     sendMessage = (msg) => {
-        //"sender" must be name of user
         try {
             let usrMsg = {
                 content: msg,
-                sender: "anon",
+                sender: this.props.user.nick,
                 time: new Date().getTime()
             };
             this.clientRef.sendMessage("/app/hungergames/chat", JSON.stringify(usrMsg));
@@ -42,9 +41,8 @@ class Chat extends Component {
     render() {
         return (
             <div>
-                {/*тут в штуках с user тоже надо вставить ник*/}
-                <TalkBox topic="Чат" currentUserId='anon'
-                         currentUser='anon' messages={ this.state.messages }
+                <TalkBox topic="Чат" currentUserId={this.props.user.userId}
+                         currentUser={this.props.user.nick} messages={ this.state.messages }
                          onSendMessage={ this.sendMessage } connected={ this.state.clientConnected }/>
 
 

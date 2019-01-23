@@ -10,14 +10,36 @@ class Weapons extends Component {
         super(props);
         this.state = {
             weapons: [],
-            weaponToDrop: []
+            weaponToDrop: [],
+            game: []
         }
     }
+
+    getGame = () => {
+        let that = this;
+        let url = 'http://localhost:8080/hungergames/game/games_by_date?date=' + new Date().getTime();
+        axios({
+            method: 'get',
+            url: url,
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    game: res.data[0],
+                });
+            this.getTributeWeapons();
+            }
+        ).catch(function (error) {
+            console.log(error);
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    };
 
     dropWeapon = () => {
         let that = this;
         let formData = new FormData();
-        formData.set('game', this.props.game.gameId);
+        formData.set('game', this.state.game.gameId);
         formData.set('weapon', this.state.weaponToDrop.name);
         axios({
             method: 'post',
@@ -27,7 +49,8 @@ class Weapons extends Component {
         }).then((res) => {
                 this.setState({
                     weapons: res.data
-                })
+                });
+            this.createWeaponIcons();
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -39,7 +62,7 @@ class Weapons extends Component {
     addWeapon = () => {
         let that = this;
         let formData = new FormData();
-        formData.set('game', this.props.game.gameId);
+        formData.set('game', this.state.game.gameId);
         formData.set('weapon', this.props.weaponToAdd.name);
         axios({
             method: 'post',
@@ -49,7 +72,8 @@ class Weapons extends Component {
         }).then((res) => {
                 this.setState({
                     weapons: res.data
-                })
+                });
+            this.createWeaponIcons();
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -58,12 +82,14 @@ class Weapons extends Component {
         });
     };
 
+
+
     createWeaponIcons = () => {
         document.getElementById('weaponTable').innerHTML = "";
         this.state.weapons.forEach(function(element) {
             document.getElementById('weaponTable').innerHTML +=
                 "<td>" +
-                "<img src={} >" +
+                "<img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' >" +
                 '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
                 'Радиус действия: ' + element.radiusOfAction +
                 'Тип: ' + element.typeOfWeapon +
@@ -72,7 +98,36 @@ class Weapons extends Component {
                 "</td>"
 
         });
+        this.state.weapons.forEach((element) => {
+                document.getElementById("imgW" + element.weapon.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
+
+        });
     };
+
+    getTributeWeapons = () => {
+        let that = this;
+        let url = 'http://localhost:8080/hungergames/game/get_tribute_weapons?gameId=' + this.state.game.gameId;
+        axios({
+            method: 'get',
+            url: url,
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    weapons: res.data
+                });
+                this.createWeaponIcons();
+            }
+        ).catch(function (error) {
+            console.log(error);
+            if (error === undefined || error.response === undefined) {
+                //that.props.history.push('/ss');
+            }
+        });
+    };
+
+    componentDidMount() {
+        this.getGame();
+    }
 
     render() {
         return(
@@ -80,7 +135,9 @@ class Weapons extends Component {
                <h3>Моё оружие</h3>
                <table>
                    <tbody>
-                   <tr id="weaponTable"/>
+                   <tr>
+                       <div id="weaponTable" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}/>
+                   </tr>
                    </tbody>
                </table>
            </div>

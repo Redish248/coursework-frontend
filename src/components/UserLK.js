@@ -198,14 +198,28 @@ import Notification from "./Notification";
                          sex: 'Мужской'
                      })
                  }
-                 document.getElementById("ItemPreview").src = "data:image/png;base64," + this.state.user.picture
-
+                 //console.log(this.state.user.picture)
+             //document.getElementById('kek').src =  this.state.user.picture
+             this.drawImage();
              }
          ).catch(function (error) {
              if (error === undefined || error.response === undefined) {
                  that.props.history.push('/ss');
              }
          });
+     };
+
+     drawImage = () => {
+         document.getElementById('kek').src =  "" + this.state.user.picture;
+         var canvas = this.refs.canvass;
+         var context = canvas.getContext("2d");
+         var img = new Image();
+
+         img.onload = function() {
+             context.drawImage(img,100,100);
+         }
+
+         img.src = this.state.user.picture;
      };
 
      componentDidMount() {
@@ -241,7 +255,10 @@ import Notification from "./Notification";
                     <tbody>
                     <tr>
                         <td>
-                            <img id="ItemPreview" src="" alt="" />
+                            <div>
+                                <canvas ref="canvass" width={640} height={425} />
+                               <img id="kek" src="" alt=""/>
+                            </div>
                             <p>Ник: {this.state.user.nick} </p>
                         </td>
                         <td>

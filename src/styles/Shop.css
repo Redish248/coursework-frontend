@@ -24,8 +24,11 @@
     font-size: 15px;
 }
 
-.infoProduct td {
+.infoProduct td, #productsT td {
     padding: 4px;
+}
+.infoProduct td {
+    width: 250px;
 }
 
 .shopImg {
@@ -33,4 +36,18 @@
     height: 150px;
 }
 
+.productName {
+    font-weight: bold;
+    font-size: 17px;
+}
 
+.buy {
+    width: 100px;
+    border-radius: 10px;
+    background-color: #0001a7;
+    color: white;
+}
+
+.menuButton {
+    width: 150px;
+}

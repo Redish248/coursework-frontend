@@ -29,14 +29,49 @@ class Step2 extends Component {
     };
 
 
+   componentDidMount() {
+       var canvas = this.refs.canvas;
+       var context = canvas.getContext("2d");
+       var fileinput = document.getElementById('ab'); // input file
+       var img = new Image();
+
+
+       fileinput.onchange = function(evt) {
+           var files = evt.target.files; // FileList object
+           var file = files[0];
+           if(file.type.match('image.*')) {
+               var reader = new FileReader();
+               // Read in the image file as a data URL.
+               reader.readAsDataURL(file);
+               reader.onload = function(evt){
+                   if( evt.target.readyState === FileReader.DONE) {
+                       img.src = evt.target.result;
+                   }
+               }
+           } else {
+               alert("not an image");
+           }
+       };
+       img.onload = function() {
+           context.drawImage(img,100,100);
+       }
+       const dataURL = this.refs.canvas.toDataURL();
+       this.setState({
+           file: dataURL
+       })
+   }
+
+
 
     clickButton = () => {
+
         this.props.signUp2(this.state.sex, this.state.height, this.state.weight,  this.state.birthday.getTime(), this.state.file);
         this.props.goToStep(3);
     };
 
     fileChangedHandler = (event) => {
-        this.setState({file: event.target.files[0]})
+        this.setState({file: event.target.files[0]});
+
     };
 
     render() {
@@ -45,7 +80,7 @@ class Step2 extends Component {
                 <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
                 <h4>Аватар:</h4>
-                <input type="file" onChange={this.fileChangedHandler}/>
+                <input type="file" id="ab" />
                 <h4>Пол:</h4>
                 <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
                 <h4>Дата рождения:</h4>
@@ -56,6 +91,7 @@ class Step2 extends Component {
                 <Spinner min={20} max={100} value={this.state.weight} onChange={this.handleChange('weight')}/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
                 <p><Button onClick={this.props.previousStep} label="Назад"/></p>
+                <canvas ref="canvas" width={640} height={425} className="hidden"/>
             </div>
         );
     }

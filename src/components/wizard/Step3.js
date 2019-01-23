@@ -32,7 +32,7 @@ class Step3 extends Component {
         formData.set('weight', this.props.weight);
         formData.set('birthday', this.props.birthday);
         if (this.props.file !== null) {
-            formData.append('file', this.props.file, this.props.file.name)
+            formData.set('file', this.props.file);
         }
         axios({
             method: 'post',

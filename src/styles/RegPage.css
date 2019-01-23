@@ -8,3 +8,7 @@
     border: 1px solid blue;
     filter: alpha(Opacity=70);
 }
+
+.hidden {
+    display: none;
+}

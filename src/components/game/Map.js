@@ -17,6 +17,7 @@ class Map extends Component {
     }
 
     getLocations(){
+        let that = this;
         axios({
             method: 'get',
             url: 'http://localhost:8080/hungergames/game/locations',
@@ -35,6 +36,7 @@ class Map extends Component {
 
     //чую ерунда написана
     move(){
+        let that = this;
         let formData = new FormData();
         formData.set('nick', this.props.nick);
         formData.set('x', this.state.curX);

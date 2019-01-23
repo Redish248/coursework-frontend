@@ -31,5 +31,7 @@
     height: 300px;
 }
 
-
+.hidden {
+    display: none;
+}
 

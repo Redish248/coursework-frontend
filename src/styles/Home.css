@@ -12,3 +12,7 @@ img {
     border: 1px solid blue;
     filter: alpha(Opacity=70);
 }
+
+canvas {
+    background-color: white;
+}

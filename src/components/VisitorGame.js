@@ -6,6 +6,7 @@ import UserNavigation from "./Navigation/TributeNavigation";
 import {Modal} from "react-bootstrap";
 import Shop from "./Shop";
 import Notification from "./Notification";
+import GameNavigation from "./Navigation/GameNavigation";
 
 class VisitorGame extends Component {
     constructor(props) {
@@ -15,8 +16,29 @@ class VisitorGame extends Component {
             tribute: [],
             nick: '',
             show: false,
+            game: []
         }
     }
+
+    getGame = () => {
+        let that = this;
+        let url = 'http://localhost:8080/hungergames/game/games_by_date?date=' + new Date().getTime();
+        axios({
+            method: 'get',
+            url: url,
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    game: res.data[0],
+                });
+            }
+        ).catch(function (error) {
+            console.log(error);
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    };
 
     getTributeInfo = () => {
         let that = this;
@@ -50,10 +72,14 @@ class VisitorGame extends Component {
       })
     };
 
+    componentDidMount() {
+        this.getGame();
+    }
+
     render() {
         return (
             <div>
-                <UserNavigation/>
+                <GameNavigation/>
 
                 <Modal show={this.state.show} onHide={() => this.setState({ show: false })} container={this} aria-labelledby="contained-modal-title">
                     <Modal.Header closeButton>
@@ -72,7 +98,7 @@ class VisitorGame extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td>Карта</td>
+                        <td><canvas ref="map" width={700} height={600} /></td>
                         <td>
                             <h3>Отправить подарок трибуту:</h3>
                             <h4>Введите имя трибута:</h4>

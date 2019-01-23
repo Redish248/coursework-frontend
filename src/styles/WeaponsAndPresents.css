@@ -36,3 +36,8 @@
     visibility: visible;
     opacity: 1;
 }
+
+.weaponImg {
+    width: 80px;
+    height: 80px;
+}
