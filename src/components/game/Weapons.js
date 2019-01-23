@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
 import "../../styles/WeaponsAndPresents.css";
+import {InputText} from "primereact/components/inputtext/InputText";
+import {Button} from "primereact/components/button/Button";
 
 class Weapons extends Component {
-    //FIXME: тут связь между weapon и weaponInGame плохо прописана
-    //TODO: а отдельно ли это от игры?
-    //FIXME: проверить названия полей таблиц у оружия и подарков
     constructor(props) {
         super(props);
         this.state = {
             weapons: [],
             weaponToDrop: [],
-            game: []
+            game: [],
+            defender: ''
         }
     }
 
@@ -89,7 +89,7 @@ class Weapons extends Component {
         this.state.weapons.forEach(function(element) {
             document.getElementById('weaponTable').innerHTML +=
                 "<td>" +
-                "<img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' >" +
+                "<p><img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' ></p>" +
                 '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
                 '<p>Радиус действия: ' + element.weapon.radiusOfAction +
                 '</p><p>Тип: ' + element.weapon.typeOfWeapon +
@@ -98,9 +98,12 @@ class Weapons extends Component {
                 "</td>"
 
         });
+        let that = this;
         this.state.weapons.forEach((element) => {
-                document.getElementById("imgW" + element.weapon.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
-
+            document.getElementById("imgW" + element.weapon.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
+            document.getElementById("imgW" + element.weapon.weaponInGameId).onclick = () => {
+                that.beat(element);
+            }
         });
     };
 
@@ -120,7 +123,35 @@ class Weapons extends Component {
         ).catch(function (error) {
             console.log(error);
             if (error === undefined || error.response === undefined) {
-                //that.props.history.push('/ss');
+                that.props.history.push('/ss');
+            }
+        });
+    };
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
+    };
+
+    beat = (weapon) => {
+        console.log(weapon.weapon.name);
+        let that = this;
+        let formData = new FormData();
+        formData.set('tribute', this.state.defender);
+        formData.set('weapon', weapon.weapon.name);
+        console.log(this.state.defender + " " + weapon.weapon.name);
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/hungergames/game/beat',
+            data: formData,
+            withCredentials: true
+        }).then((res) => {
+               console.log('attacked')
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
             }
         });
     };
@@ -136,6 +167,9 @@ class Weapons extends Component {
                <table>
                    <tbody>
                    <tr>
+                       <p>Выберите трибута для ударa:</p>
+                       <InputText value={this.state.defender} onChange={this.handleChange('defender')}/>
+
                        <div id="weaponTable" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}/>
                    </tr>
                    </tbody>

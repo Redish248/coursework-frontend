@@ -60,8 +60,7 @@ class Presents extends Component {
     usePresent = (present) => {
         let that = this;
         let formData = new FormData();
-        formData.set('game', this.props.state.gameId);
-        formData.set('presentName', present);
+        formData.set('presentName', present.product.name);
         axios({
             method: 'post',
             url: 'http://localhost:8080/hungergames/game/use_present',
@@ -81,24 +80,23 @@ class Presents extends Component {
         document.getElementById('presentTable').innerHTML = "";
         this.state.presents.forEach(function (element) {
             document.getElementById('presentTable').innerHTML +=
-                "<td>" +
-                "<img class='weaponImg' id='imgP" +element.sendingId +"' src='' alt='' >" +
+                '<td>' +
+                '<p><img class="weaponImg" id="imgP' +element.sendingId +'" src="" alt=""></p>' +
                 '<div class="tooltip1">' + element.product.name +'<span class="tooltiptext1">' +
                 '<p>Тип: ' + element.product.typeOfPresent +
                 '</p><p>Описание: ' + element.product.description +
                 '</p><p>Восстанавливает: ' + element.product.typeOfRecovery +
                 '</p><p>Коэффициент: ' + element.product.healthRecovery +
                 '</p></span></div>' +
-                "</td>"
+                '</td>'
         });
+        let present = this;
         this.state.presents.forEach((element) => {
             document.getElementById("imgP" + element.sendingId).src = "data:image/png;base64," + element.product.picture;
-
+            document.getElementById("imgP" + element.sendingId).onclick = () => {present.usePresent(element)};
         });
-
     };
 
-    //TODO: this.props.gameId in present
     onMessageReceive = (msg) => {
         console.log("Подарок прилетел))");
         let that = this;

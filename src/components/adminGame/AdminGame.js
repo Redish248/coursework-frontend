@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import Notification from "./Notification";
-import GameNavigation from "./Navigation/GameNavigation";
+import Notification from "../Notification";
+import GameNavigation from "../Navigation/GameNavigation";
 import * as axios from "axios/index";
 import {InputText} from "primereact/components/inputtext/InputText";
 import {Button} from "primereact/components/button/Button";
+import AdminMap from "./AdminMap";
 
 class AdminGame extends Component {
     constructor(props) {
@@ -76,7 +77,7 @@ class AdminGame extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><canvas ref="map" width={700} height={600} /></td>
+                        <td><AdminMap/></td>
                         <td>
                             <h4>Создать ловушку:</h4>
                             <p>Название:</p>

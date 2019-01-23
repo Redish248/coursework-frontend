@@ -92,13 +92,13 @@ class GameTribute extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><Map/></td>
+                        <td><Map nick={this.state.nick}/></td>
                         <td>
                             <table>
                                 <tbody>
                                 <tr><td>
+                                    <p>Ваш ник: {this.state.user.nick}</p>
                                     <TributeInfo/>
-
                                 </td></tr>
                                 <tr><td >
                                    <Weapons weaponToAdd={this.state.weaponToAdd}/>

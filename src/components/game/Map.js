@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import * as axios from "axios";
 import SockJsClient from "react-stomp";
 import PointImg from "../../images/user.png";
@@ -138,6 +138,7 @@ class Map extends Component {
                     map: res.data.area,
                     locations: res.data.location
                 });
+
                 this.moveCanvas(this.state.curX, this.state.curY);
             }
         ).catch(function (error) {
@@ -191,6 +192,7 @@ class Map extends Component {
         let loc = this.state.locations;
         const canvas = this.refs.map;
         const ctx = canvas.getContext("2d");
+        let name = this.state.nick;
         this.state.map.forEach(function (element) {
             let img = new Image();
             let x = element.xcoordinate * imgSize;
@@ -202,9 +204,13 @@ class Map extends Component {
         });
         let userImg = new Image();
         userImg.onload = function () {
-            ctx.drawImage(userImg, 330, 330, 40, 40);
+            ctx.drawImage(userImg, 330,330,40,40);
+            ctx.fillStyle = "#FFF";
+            ctx.font = "italic 15pt Arial";
+            ctx.fillText(name, 315, 390);
         };
         userImg.src = PointImg;
+
         this.move(curX, curY);
         this.state.tributes.forEach(function (tribute) {
             if (tribute.x > (st.curX - xStart) && tribute.x < (st.curX + xStart) && tribute.y > (st.curY - yStart) && tribute.y < (st.curY + yStart)) {

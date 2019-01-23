@@ -7,10 +7,10 @@ import Home from "./components/Home";
 import MainPage from "./components/MainPage";
 import UserLK from "./components/UserLK";
 import GameHistory from "./components/GameHistory";
-import VisitorGame from "./components/VisitorGame";
+import VisitorGame from "./components/visitor/VisitorGame";
 import GameTribute from "./components/game/GameTribute";
-import AdminGame from "./components/AdminGame";
-import CreateGame from "./components/CreateGame";
+import AdminGame from "./components/adminGame/AdminGame";
+import CreateGame from "./components/adminGame/CreateGame";
 
 export default () =>
     <Switch>

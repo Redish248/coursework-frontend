@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import "../styles/Shop.css";
 import * as axios from "axios/index";
 import {Button} from "primereact/components/button/Button";
+import {InputText} from "primereact/components/inputtext/InputText";
 
-import SockJsClient from "react-stomp";
 //TODO: потом сделать список всех трибутов, на которых можно нажать и отправить подарок
 //а не вводить имя
 class Shop extends Component {
@@ -12,8 +12,10 @@ class Shop extends Component {
         super(props);
         this.state = {
             products: [],
+            nick: '',
         }
     }
+
     getProducts = () => {
         let that = this;
         axios({
@@ -44,14 +46,34 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.props;
+        let pr = this;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Еда') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
                 let button = document.getElementById(element.productId);
                 button.onclick = function () {
-                    sendPresent(element, pr.tribute, 1);
+                    pr.sendPresent(element, 1);
                 }
+            }
+        });
+    };
+
+    sendPresent = (product, count) => {
+        let formData = new FormData();
+        formData.set('nick', this.state.nick);
+        formData.set('presentID', product.productId.toString());
+        formData.set('quantity', count.toString());
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/hungergames/game/send_present',
+            data: formData,
+            withCredentials: true
+        }).then((res) => {
+                console.log("Доставлено!")
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                console.log("Ошибка при отправке подарка")
             }
         });
     };
@@ -63,13 +85,13 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.props;
+        let pr = this.state;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Напиток') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
                 let button = document.getElementById(element.productId);
                 button.onclick = function () {
-                    sendPresent(element, pr.tribute, 1);
+                    pr.sendPresent(element, 1);
                 }
             }
         });
@@ -82,13 +104,13 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.props;
+        let pr = this.state;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Лекарства') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
                 let button = document.getElementById(element.productId);
                 button.onclick = function () {
-                    sendPresent(element, pr.tribute, 1);
+                    pr.sendPresent(element, 1);
                 }
             }
         });
@@ -102,15 +124,21 @@ class Shop extends Component {
             }
         });
 
-        let pr = this.props;
+        let pr = this.state;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Инструменты') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
                 let button = document.getElementById(element.productId);
                 button.onclick = function () {
-                    sendPresent(element, pr.tribute, 1);
+                    pr.sendPresent(element, 1);
                 }
             }
+        });
+    };
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
         });
     };
 
@@ -121,14 +149,14 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.props;
+        let pr = this.state;
 
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Другое') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
                 let button = document.getElementById(element.productId);
                 button.onclick = function () {
-                    sendPresent(element, pr.tribute, 1);
+                    pr.sendPresent(element, 1);
                 }
             }
         });
@@ -137,6 +165,9 @@ class Shop extends Component {
     render() {
         return(
             <div className="shop">
+                Введите имя трибута:
+                <InputText value={this.state.nick} onChange={this.handleChange('nick')}/>
+                <Button className="ok" label="Ок" onClick={this.getTributeInfo}/>
                 <Button className="menuButton" label="Еда" onClick={this.createFoodIcons}/>
                 <Button className="menuButton" label="Напитки" onClick={this.createDrinkIcons}/>
                 <Button className="menuButton" label="Лекарства" onClick={this.createMedicineIcons}/>
@@ -172,10 +203,11 @@ const createProduct = (element) => {
 
 //TODO: количество подарков при отправке
 const sendPresent = (product, tribute, count) => {
+    console.log(tribute)
     let formData = new FormData();
-    formData.set('tributeID', tribute.tributeId);
-    formData.set('presentID', product.productId);
-    formData.set('quantity', count);
+    formData.set('tributeID', tribute.tributeId.toString());
+    formData.set('presentID', product.productId.toString());
+    formData.set('quantity', count.toString());
     axios({
         method: 'post',
         url: 'http://localhost:8080/hungergames/game/send_present',

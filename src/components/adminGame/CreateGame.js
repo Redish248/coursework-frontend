@@ -3,9 +3,9 @@ import * as axios from "axios/index";
 import {Spinner} from "primereact/components/spinner/Spinner";
 import {Calendar} from "primereact/components/calendar/Calendar";
 import {Dropdown} from "primereact/components/dropdown/Dropdown";
-import AdminNavigation from "./Navigation/AdminNavigation";
+import AdminNavigation from "../Navigation/AdminNavigation";
 import {Button} from "primereact/components/button/Button";
-import Notification from "./Notification";
+import Notification from "../Notification";
 import {Messages} from 'primereact/messages';
 
 class CreateGame extends Component {
