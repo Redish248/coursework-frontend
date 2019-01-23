@@ -1,48 +1,30 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import * as axios from "axios";
 import SockJsClient from "react-stomp";
+import PointImg from "../../images/user.png";
+import WeaponImg from "../../images/weapon.png"
 
 class Map extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             locations: [],
             map: [],
             weapons: [],
             tributes: [],
-            curX: 0,
-            curY: 0,
+            curX: 4,
+            curY: 4,
             direction: ''
         }
 
     }
 
-    getLocations(){
-        let that = this;
-        axios({
-            method: 'get',
-            url: 'http://localhost:8080/hungergames/game/locations',
-            withCredentials: true
-        }).then((res) => {
-                this.setState({
-                    locations: res.data
-                });
-            }
-        ).catch(function (error) {
-            if (error === undefined || error.response === undefined) {
-                that.props.history.push('/ss');
-            }
-        });
-    }
-
-    //чую ерунда написана
-    move(){
+    move() {
         let that = this;
         let formData = new FormData();
         formData.set('nick', this.props.nick);
         formData.set('x', this.state.curX);
         formData.set('y', this.state.curY);
-        formData.set('gameId', this.props.game.gameId);
         axios({
             method: 'post',
             url: 'http://localhost:8080/hungergames/game/get_map',
@@ -50,12 +32,8 @@ class Map extends Component {
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    map: res.data.area,
-                    weapons: res.data.weapons
+                    weapons: res.data
                 });
-                this.map.forEach(function(item){
-                    item.locationId = this.locations[item.locationId-1];
-                })
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -65,32 +43,46 @@ class Map extends Component {
     }
 
     onMessageReceive = (msg) => {
-        let r=4;
-        //sleeeeep
+        let r = 3;
+        let newTributes = [];
+        this.state.tributes.forEach(function (item) {
+            if (item.nick !== msg.nick) {
+                newTributes[newTributes.length - 1] = item;
+            }
+        });
+        if (msg.x >= (this.state.curX - r) && msg.x <= (this.state.curX + r) && msg.y >= (this.state.curY - r) && msg.y <= (this.state.curY + r)) {
+            this.setState(prevState => ({
+                tributes: [...prevState.messages, msg]
+            }));
+        }
     };
 
     onClickCanvas = (e) => {
-        if (e.nativeEvent.offsetX < 350) {
+        let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
+        if (x > 200 && x < 300 && y > 300 && y < 400 && this.state.curX > 4) {
             this.setState({
-                direction: 'left'
-            })
+                curX: this.state.curX - 1
+            });
+            this.moveCanvas(this.state.curX - 1, this.state.curY);
         }
-        if (e.nativeEvent.offsetY  < 350) {
+        if (x > 400 && x < 500 && y > 300 && y < 400 && this.state.curX < Math.sqrt(this.state.map.length) - 3) {
             this.setState({
-                direction: 'bottom'
-            })
+                curX: this.state.curX + 1
+            });
+            this.moveCanvas(this.state.curX + 1, this.state.curY);
         }
-        if (e.nativeEvent.offsetX > 350) {
+        if (x > 300 && x < 400 && y > 200 && y < 300 && this.state.curY > 4) {
             this.setState({
-                direction: 'right'
-            })
+                curY: this.state.curY - 1
+            });
+            this.moveCanvas(this.state.curX, this.state.curY - 1);
         }
-        if (e.nativeEvent.offsetY  > 350) {
+        if (x > 300 && x < 400 && y > 400 && y < 500 && this.state.curY < Math.sqrt(this.state.map.length) - 3) {
             this.setState({
-                direction: 'top'
-            })
+                curY: this.state.curY + 1
+            });
+            this.moveCanvas(this.state.curX, this.state.curY + 1);
         }
-        this.moveCanvas();
     };
 
     getMap = () => {
@@ -101,9 +93,10 @@ class Map extends Component {
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    map: res.data[0],
-                    locations: res.data[1]
+                    map: res.data.area,
+                    locations: res.data.location
                 });
+                this.moveCanvas(this.state.curX, this.state.curY);
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -112,35 +105,41 @@ class Map extends Component {
         });
     };
 
-    drawMap = () => {
+    moveCanvas = (curX, curY) => {
+        let imgSize = 100;
+        let xStart = 4, yStart = 4;
         let loc = this.state.locations;
-        const canvas = this.refs.canvas;
+        const canvas = this.refs.map;
         const ctx = canvas.getContext("2d");
-        let x = 0;
-        let y = 0;
-        this.state.map.forEach(function(element) {
-            let img = new Image;
-            img.onload=function(){
-              ctx.drawImage(img,x,y)
+        this.state.map.forEach(function (element) {
+            let img = new Image();
+            let x = element.xcoordinate * imgSize;
+            let y = element.ycoordinate * imgSize;
+            img.onload = function () {
+                ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
             };
-            img.src = "data:image/png;base64," + loc[element.locationId-1];
-            x = element.xCoordinate * 200;
-            y = element.yCoordinate * 200;
-        })
+            img.src = "data:image/png;base64," + loc[element.locationId - 1].picture;
+        });
+        let userImg = new Image();
+        userImg.onload = function () {
+            ctx.drawImage(userImg, 330,330,40,40);
+        };
+        userImg.src = PointImg;
+
     };
 
-    moveCanvas = () => {
-        
-    };
+    componentDidMount() {
+        this.getMap();
+    }
 
 
     render() {
-        return(
+        return (
             <div>
-                <canvas ref="map" width={700} height={700} onClick={this.onClickCanvas} />
+                <canvas ref="map" width={700} height={700} onClick={this.onClickCanvas}/>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/tributesLocation"]}
-                              onMessage={ this.onMessageReceive }
-                              debug={ false }/>
+                              onMessage={this.onMessageReceive}
+                              debug={false}/>
             </div>
         );
     }

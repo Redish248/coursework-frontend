@@ -24,7 +24,7 @@ class Weapons extends Component {
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    game: res.data[0],
+                    game: res.data,
                 });
             this.getTributeWeapons();
             }

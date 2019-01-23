@@ -23,7 +23,7 @@ class Presents extends Component {
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    game: res.data[0],
+                    game: res.data,
                 });
             this.onMessageReceive();
             }
