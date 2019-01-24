@@ -59,26 +59,6 @@ class GameTribute extends Component {
         });
     };
 
-    getVisibleMap = () => {
-        let that = this;
-        let url = 'http://localhost:8080/hungergames/get_map?tributeLocation=' + this.state.tributeLocation;
-        axios({
-            method: 'get',
-            url: url,
-            withCredentials: true
-        }).then((res) => {
-                this.setState({
-                    map: res.data
-                });
-            }
-        ).catch(function (error) {
-            console.log(error);
-            if (error === undefined || error.response === undefined) {
-                that.props.history.push('/ss');
-            }
-        });
-    };
-
     componentDidMount() {
         this.getUserInfo();
         this.getGame();

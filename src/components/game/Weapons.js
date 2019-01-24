@@ -3,6 +3,7 @@ import * as axios from "axios/index";
 import "../../styles/WeaponsAndPresents.css";
 import {InputText} from "primereact/components/inputtext/InputText";
 import {Button} from "primereact/components/button/Button";
+import SockJsClient from "react-stomp";
 
 class Weapons extends Component {
     constructor(props) {
@@ -59,7 +60,7 @@ class Weapons extends Component {
         });
     };
 
-    addWeapon = () => {
+    /*addWeapon = () => {
         let that = this;
         let formData = new FormData();
         formData.set('game', this.state.game.gameId);
@@ -80,7 +81,7 @@ class Weapons extends Component {
                 that.props.history.push('/ss');
             }
         });
-    };
+    };*/
 
 
 
@@ -135,12 +136,10 @@ class Weapons extends Component {
     };
 
     beat = (weapon) => {
-        console.log(weapon.weapon.name);
         let that = this;
         let formData = new FormData();
         formData.set('tribute', this.state.defender);
         formData.set('weapon', weapon.weapon.name);
-        console.log(this.state.defender + " " + weapon.weapon.name);
         axios({
             method: 'post',
             url: 'http://localhost:8080/hungergames/game/beat',
@@ -154,6 +153,21 @@ class Weapons extends Component {
                 that.props.history.push('/ss');
             }
         });
+    };
+
+    onMessageReceive = (msg) => {
+        //почему-то не работает
+        /*this.takeWeapon(msg);
+        this.createWeaponIcons();*/
+        //поэтому опять запрос на все оружия
+        this.getTributeWeapons();
+    };
+
+    takeWeapon = (msg) => {
+        this.setState(prevState => ({
+            weapons: [...prevState.weapons, msg]
+        }));
+
     };
 
     componentDidMount() {
@@ -174,6 +188,9 @@ class Weapons extends Component {
                    </tr>
                    </tbody>
                </table>
+               <SockJsClient url='http://localhost:8080/ws' topics={["/user/queue/weapons"]}
+                             onMessage={ this.onMessageReceive }
+                             debug={ false }/>
            </div>
         );
     }

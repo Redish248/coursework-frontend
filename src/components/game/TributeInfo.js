@@ -28,11 +28,13 @@ class TributeInfo extends Component {
         let that = this;
         axios({
             method: 'get',
-            url: 'http://localhost:8080/hungergames/game/health                                                  ',
+            url: 'http://localhost:8080/hungergames/game/health',
             withCredentials: true
         }).then((res) => {
                 this.setState({
-                    weapons: res.data
+                    health: res.data.health,
+                    hunger: res.data.hunger,
+                    thirst: res.data.thirst
                 });
             }
         ).catch(function (error) {
