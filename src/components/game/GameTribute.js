@@ -69,26 +69,27 @@ class GameTribute extends Component {
             <div>
                 <GameNavigation/>
                 <div id="gameTribute">
-                <table className="gameMain">
-                    <tbody>
-                    <tr>
-                        <td colSpan="2" align="left">
-                            <h2>Режим игры</h2>
-                            <TributeInfo/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><Map nick={this.state.nick} status="tribute"/></td>
-                        <td valign="top" align="left">
-                            Вы: {this.state.user.nick}
-                            <Weapons weaponToAdd={this.state.weaponToAdd}/>
-                            <Presents/>
-                            <Chat user={this.state.user}/>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Notification isGamePage={true} history={this.props.history}/>
+                    <table className="gameMain">
+                        <tbody>
+                        <tr>
+                            <td colSpan="2" align="left">
+                                <h2>Режим игры</h2>
+                                <TributeInfo/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><Map nick={this.state.nick} status="tribute"/></td>
+                            <td valign="top" align="left">
+                                Вы: {this.state.user.nick}
+                                <Weapons weaponToAdd={this.state.weaponToAdd}/>
+                                <Presents/>
+                                <Chat user={this.state.user}/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <Notification isGamePage={true} history={this.props.history}/>
+                </div>
             </div>
         );
     }
