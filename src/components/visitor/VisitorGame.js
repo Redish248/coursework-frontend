@@ -6,6 +6,7 @@ import Shop from "../Shop";
 import Notification from "../Notification";
 import GameNavigation from "../Navigation/GameNavigation";
 import MapVisitor from "./MapVisitor";
+import Map from "../game/Map";
 
 class VisitorGame extends Component {
     constructor(props) {
@@ -96,7 +97,7 @@ class VisitorGame extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><MapVisitor/></td>
+                        <td><Map status="visitor"/></td>
                         <td>
                             <h3>Отправить подарок трибуту:</h3>
                             <br/>
@@ -105,7 +106,7 @@ class VisitorGame extends Component {
                     </tr>
                     </tbody>
                 </table>
-                <Notification/>
+                <Notification isGamePage={true} history={this.props.history}/>
             </div>
         );
     }

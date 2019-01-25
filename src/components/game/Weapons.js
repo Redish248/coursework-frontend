@@ -103,10 +103,29 @@ class Weapons extends Component {
         this.state.weapons.forEach((element) => {
             document.getElementById("imgW" + element.weapon.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
             document.getElementById("imgW" + element.weapon.weaponInGameId).onclick = () => {
-                that.beat(element);
+                that.activateWeapon(element.weapon.name);
             }
         });
     };
+
+    activateWeapon(weapon){
+        let that = this;
+        let formData = new FormData();
+        formData.set('weaponName', weapon);
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/hungergames/game/choose_weapon',
+            data: formData,
+            withCredentials: true
+        }).then((res) => {
+                console.log(res.data);
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    }
 
     getTributeWeapons = () => {
         let that = this;
@@ -135,28 +154,9 @@ class Weapons extends Component {
         });
     };
 
-    beat = (weapon) => {
-        let that = this;
-        let formData = new FormData();
-        formData.set('tribute', this.state.defender);
-        formData.set('weapon', weapon.weapon.name);
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/hungergames/game/beat',
-            data: formData,
-            withCredentials: true
-        }).then((res) => {
-               console.log('attacked')
-            }
-        ).catch(function (error) {
-            if (error === undefined || error.response === undefined) {
-                that.props.history.push('/ss');
-            }
-        });
-    };
 
     onMessageReceive = (msg) => {
-        //почему-то не работает
+        //почему-то не работает (отслеживает только обновления)
         /*this.takeWeapon(msg);
         this.createWeaponIcons();*/
         //поэтому опять запрос на все оружия
@@ -181,9 +181,6 @@ class Weapons extends Component {
                <table>
                    <tbody>
                    <tr>
-                       <p>Выберите трибута для ударa:</p>
-                       <InputText value={this.state.defender} onChange={this.handleChange('defender')}/>
-
                        <div id="weaponTable" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}/>
                    </tr>
                    </tbody>

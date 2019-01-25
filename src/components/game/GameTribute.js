@@ -72,7 +72,7 @@ class GameTribute extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><Map nick={this.state.nick}/></td>
+                        <td><Map nick={this.state.nick} status="tribute"/></td>
                         <td>
                             <table>
                                 <tbody>
@@ -93,7 +93,7 @@ class GameTribute extends Component {
                     <tr><td colSpan="2"><Chat user={this.state.user}/></td></tr>
                     </tbody>
                 </table>
-                <Notification/>
+                <Notification isGamePage={true} history={this.props.history}/>
             </div>
         );
     }

@@ -4,6 +4,9 @@ import SockJsClient from "react-stomp";
 import PointImg from "../../images/user.png";
 import WeaponImg from "../../images/weapon.png"
 import TributeImg from "../../images/tribute.png";
+import Here from "../../images/here.png";
+import {Dialog} from "primereact/dialog";
+import {Button} from "primereact/button";
 
 class Map extends Component {
     constructor(props) {
@@ -15,9 +18,10 @@ class Map extends Component {
             tributes: [],
             curX: 4,
             curY: 4,
-            direction: '',
             nick: '',
-            gameId: 0
+            picture: '',
+            defending: '',
+            show: false
         }
 
     }
@@ -33,7 +37,6 @@ class Map extends Component {
                     nick: res.data.user.nick,
                     curX: res.data.locationX,
                     curY: res.data.locationY,
-                    gameId: res.data.gameId
                 });
             }
         ).catch(function (error) {
@@ -117,10 +120,14 @@ class Map extends Component {
     };
 
 
-    onMessageWeaponReceive = (msg) => {
+    onMessageWeaponDelReceive = (msg) => {
         this.updateWeaponLoc(msg);
         this.moveCanvas(this.state.curX, this.state.curY, false)
+    };
 
+    onMessageWeaponAddReceive = (msg) => {
+        this.addWeaponLoc(msg);
+        this.moveCanvas(this.state.curX, this.state.curY, false)
     };
 
     updateWeaponLoc = (msg) => {
@@ -142,31 +149,41 @@ class Map extends Component {
         let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
         let curX = this.state.curX, curY = this.state.curY;
         if (x > 200 && x < 300 && y > 300 && y < 400 && this.state.curX > 4) {
-            this.setState({
-                curX: this.state.curX - 1
-            });
             curX = this.state.curX - 1;
         }
         if (x > 400 && x < 500 && y > 300 && y < 400 && this.state.curX < Math.sqrt(this.state.map.length) - 3) {
-            this.setState({
-                curX: this.state.curX + 1
-            });
             curX = this.state.curX + 1
         }
         if (x > 300 && x < 400 && y > 200 && y < 300 && this.state.curY > 4) {
-            this.setState({
-                curY: this.state.curY - 1
-            });
             curY = this.state.curY - 1
         }
         if (x > 300 && x < 400 && y > 400 && y < 500 && this.state.curY < Math.sqrt(this.state.map.length) - 3) {
-            this.setState({
-                curY: this.state.curY + 1
-            });
             curY = this.state.curY + 1
         }
-        this.moveCanvas(curX, curY, true);
+        this.isTributesInCell(curX, curY);
     };
+
+    isTributesInCell(curX, curY){
+        let rival, foundFlag = false;
+        this.state.tributes.forEach(function (tribute) {
+            if (tribute.x===curX && tribute.y===curY){
+                foundFlag = true;
+                rival = tribute.nick;
+            }
+        });
+        if (foundFlag){
+            this.setState({
+                show: true,
+                defending: rival
+            });
+        } else {
+            this.setState({
+                curX: curX,
+                curY: curY
+            });
+            this.moveCanvas(curX, curY, true);
+        }
+    }
 
     getMap = () => {
         let that = this;
@@ -214,8 +231,8 @@ class Map extends Component {
 
 
     moveCanvas = (curX, curY, changeFlag) => {
-        let imgSize = 100;
-        let xStart = 4, yStart = 4;
+        let imgSize = 100, xStart = 4, yStart = 4;
+        let st = this.state;
         let loc = this.state.locations;
         const canvas = this.refs.map;
         const ctx = canvas.getContext("2d");
@@ -236,8 +253,8 @@ class Map extends Component {
             ctx.font = "italic 15pt Arial";
             ctx.fillText(name, 315, 390);
         };
-        userImg.src = PointImg;
-        if (changeFlag) {
+        userImg.src = this.state.picture;
+        if (changeFlag && this.props.status==="tribute") {
             this.move(curX, curY);
         }
         this.state.tributes.forEach(function (tribute) {
@@ -253,21 +270,71 @@ class Map extends Component {
     };
 
 
+    beat = (defender) => {
+        let that = this;
+        let formData = new FormData();
+        formData.set('tribute', defender);
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/hungergames/game/beat',
+            data: formData,
+            withCredentials: true
+        }).then((res) => {
+                console.log('attack')
+            }
+        ).catch(function (error) {
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    };
+
     componentDidMount() {
-        this.tributeInfo();
+        if (this.props.status==="tribute") {
+            this.setState({
+                picture: PointImg
+            });
+            this.tributeInfo();
+        } else {
+            this.setState({
+                picture: Here
+            });
+        }
         this.getMap();
     }
 
+    onAgree = (e) => {
+        this.onHide(e);
+        this.beat(this.state.defending);
+    };
+
+    onHide = (e) => {
+        this.setState({
+            show: false
+        });
+    };
 
     render() {
+        const footer = (
+            <div>
+                <Button label="Да" icon="pi pi-check" onClick={this.onAgree} />
+                <Button label="Нет" icon="pi pi-times" onClick={this.onHide} />
+            </div>
+        );
         return (
             <div>
                 <canvas ref="map" width={700} height={700} onClick={this.onClickCanvas}/>
+                <Dialog header="Атака" footer={footer} visible={this.state.show} modal={true} onHide={this.onHide}>
+                    Напасть на {this.state.defending}?
+                </Dialog>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/tributesLocation"]}
                               onMessage={this.onMessageReceive}
                               debug={false}/>
-                <SockJsClient url='http://localhost:8080/ws' topics={["/topic/weaponsLocation"]}
-                              onMessage={this.onMessageWeaponReceive}
+                <SockJsClient url='http://localhost:8080/ws' topics={["/topic/weaponsDelLocation"]}
+                              onMessage={this.onMessageWeaponDelReceive}
+                              debug={false}/>
+                <SockJsClient url='http://localhost:8080/ws' topics={["/topic/weaponsAddLocation"]}
+                              onMessage={this.onMessageWeaponAddReceive}
                               debug={false}/>
             </div>
         );

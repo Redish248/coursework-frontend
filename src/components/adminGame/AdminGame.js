@@ -5,6 +5,7 @@ import * as axios from "axios/index";
 import {InputText} from "primereact/components/inputtext/InputText";
 import {Button} from "primereact/components/button/Button";
 import AdminMap from "./AdminMap";
+import Map from "../game/Map";
 
 class AdminGame extends Component {
     constructor(props) {
@@ -77,7 +78,7 @@ class AdminGame extends Component {
                 <table>
                     <tbody>
                     <tr>
-                        <td><AdminMap/></td>
+                        <td><Map status="admin"/></td>
                         <td>
                             <h4>Создать ловушку:</h4>
                             <p>Название:</p>
@@ -91,7 +92,7 @@ class AdminGame extends Component {
                     </tr>
                     </tbody>
                 </table>
-                <Notification/>
+                <Notification isGamePage={true} history={this.props.history}/>
             </div>
         );
     }

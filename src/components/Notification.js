@@ -1,33 +1,65 @@
 import React, { Component } from "react";
 import SockJsClient from 'react-stomp';
 import {Growl} from 'primereact/growl';
+import {Button} from "primereact/button";
+import {Dialog} from "primereact/dialog";
 
 class Notification extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            show: false,
+            content: '',
+            title: ''
+        };
     }
 
     onMessageReceive = (msg) => {
-        let type, severity="info";
+        let type, severity="info", sticky = false;
         switch (msg.type) {
             case "GAMESTART": type = "Начало игры"; break;
             case "GAMEOVER": type = "Конец игры"; break;
             case "HOOK": type = "Ловушка"; break;
-            case "SELECTION": type = "Жатва"; break;
+            case "SELECTION": type = "Жатва"; sticky = true; break;
             case "PRESENT": type = "Подарок"; break;
             case "DEADTRIBUTE": type = "Павший трибут"; break;
-            case "ATTACK": type = "Нападение"; severity = "error"; break;
+            case "ATTACK": type = "Нападение"; severity = "error"; sticky = true; break;
+            case "SUCCESSATTACK": type = "Нападение"; severity = "success"; break;
             default : type = "Информация";
         }
-        this.growl.show({sticky: true, severity: severity, summary: type, detail: msg.content});
+        if (type==="Конец игры"){
+            this.setState({
+                show: true,
+                content: msg.content,
+                title: type
+            })
+        } else {
+            this.growl.show({sticky: sticky, severity: severity, summary: type, detail: msg.content});
+        }
+    };
+
+    onHide = (e) => {
+        this.setState({
+            show: false
+        });
+        if (this.props.isGamePage){
+            this.props.history.push("/home");
+        }
     };
 
     render() {
+        const footer = (
+            <div>
+                <Button label="Ok" icon="pi pi-check" onClick={this.onHide} />
+            </div>
+        );
         return (
             <div>
                 {/*FIXME: first growl hidden under header*/}
                 <Growl ref={(el) => this.growl = el}/>
+                <Dialog header={this.state.title} footer={footer} visible={this.state.show} modal={true} onHide={this.onHide}>
+                    {this.state.content}
+                </Dialog>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/notification","/user/queue/notification"]}
                               onMessage={ this.onMessageReceive }
                               debug={ false }/>
