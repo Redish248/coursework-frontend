@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import TributeInfo from "./TributeInfo";
 import Chat from "./Chat";
 import Weapons from "./Weapons";
@@ -65,34 +65,30 @@ class GameTribute extends Component {
     }
 
     render() {
-        return(
+        return (
             <div>
                 <GameNavigation/>
-                <h1>Режим игры</h1>
-                <table>
+                <div id="gameTribute">
+                <table className="gameMain">
                     <tbody>
                     <tr>
-                        <td><Map nick={this.state.nick}/></td>
-                        <td>
-                            <table>
-                                <tbody>
-                                <tr><td>
-                                    <p>Ваш ник: {this.state.user.nick}</p>
-                                    <TributeInfo/>
-                                </td></tr>
-                                <tr><td >
-                                   <Weapons weaponToAdd={this.state.weaponToAdd}/>
-                                </td></tr>
-                                <tr><td >
-                                   <Presents/>
-                                </td></tr>
-                                </tbody>
-                            </table>
+                        <td colSpan="2" align="left">
+                            <h2>Режим игры</h2>
+                            <TributeInfo/>
                         </td>
                     </tr>
-                    <tr><td colSpan="2"><Chat user={this.state.user}/></td></tr>
+                    <tr>
+                        <td><Map nick={this.state.nick}/></td>
+                        <td valign="top" align="left">
+                            Вы: {this.state.user.nick}
+                            <Weapons weaponToAdd={this.state.weaponToAdd}/>
+                            <Presents/>
+                            <Chat user={this.state.user}/>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
+                </div>
                 <Notification/>
             </div>
         );

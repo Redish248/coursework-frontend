@@ -19,9 +19,6 @@ export default class NavigationHome extends Component {
                             <NavItem eventKey={1} href="/">
                                 На главную
                             </NavItem>
-                            <NavItem eventKey={2} href="/gamehistory">
-                                История игр
-                            </NavItem>
                         </Nav>
                         <Nav pullRight>
                             <NavItem eventKey={1} href="/login">

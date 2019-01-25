@@ -5,6 +5,8 @@ import PointImg from "../../images/user.png";
 import WeaponImg from "../../images/weapon.png"
 import TributeImg from "../../images/tribute.png";
 
+import "../../styles/GameTribute.css"
+
 class Map extends Component {
     constructor(props) {
         super(props);
@@ -204,7 +206,6 @@ class Map extends Component {
             let img = new Image();
             let x = element.x * imgSize;
             let y = element.y * imgSize;
-            console.log(x + " " + y);
             img.onload = function () {
                 ctx.drawImage(img, x - (curX - xStart + 1) * imgSize, y - (curY - yStart + 1) * imgSize, imgSize / 2, imgSize / 2);
             };
@@ -225,13 +226,14 @@ class Map extends Component {
             let x = element.xcoordinate * imgSize;
             let y = element.ycoordinate * imgSize;
             img.onload = function () {
+                ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
                 ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
             };
             img.src = "data:image/png;base64," + loc[element.locationId - 1].picture;
         });
         let userImg = new Image();
         userImg.onload = function () {
-            ctx.drawImage(userImg, 330,330,40,40);
+            ctx.drawImage(userImg, 310,310,70,70);
             ctx.fillStyle = "#FFF";
             ctx.font = "italic 15pt Arial";
             ctx.fillText(name, 315, 390);
@@ -244,7 +246,10 @@ class Map extends Component {
             if (tribute.x > (curX - xStart) && tribute.x < (curX + xStart) && tribute.y > (curY - yStart) && tribute.y < (curY + yStart)) {
                 let tributesImg = new Image();
                 tributesImg.onload = function () {
-                    ctx.drawImage(tributesImg, 330 + (tribute.x - curX) * imgSize, 330 + (tribute.y - curY) * imgSize, 40, 40);
+                    ctx.drawImage(tributesImg, 310 + (tribute.x - curX) * imgSize, 310 + (tribute.y - curY) * imgSize, 70, 70);
+                    ctx.fillStyle = "#FFF";
+                    ctx.font = "italic 14pt Arial";
+                    ctx.fillText(tribute.nick,  310 + (tribute.x - curX) * imgSize, 390 + (tribute.y - curY) * imgSize);
                 };
                 tributesImg.src = TributeImg;
             }
@@ -262,7 +267,7 @@ class Map extends Component {
     render() {
         return (
             <div>
-                <canvas ref="map" width={700} height={700} onClick={this.onClickCanvas}/>
+                <canvas id="maps" ref="map" width={700} height={700} onClick={this.onClickCanvas}/>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/tributesLocation"]}
                               onMessage={this.onMessageReceive}
                               debug={false}/>

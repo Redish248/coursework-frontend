@@ -9,7 +9,8 @@ class GameHistory extends Component {
 constructor(props) {
     super(props);
     this.state = {
-        games: []
+        games: [],
+        winner: []
     }
 }
 
@@ -28,7 +29,7 @@ constructor(props) {
         ).catch(function (error) {
             console.log(error)
             if (error === undefined || error.response === undefined) {
-                that.props.history.push('/ss');
+                //that.props.history.push('/ss');
             }
         });
     };
@@ -46,13 +47,48 @@ constructor(props) {
         this.getGames();
     }
 
+    getWinner = (gameId) => {
+        let that = this;
+        axios({
+            method: 'get',
+            url: 'http://localhost:8080/hungergames/game/gameWinner?gameId=' + gameId,
+            withCredentials: true
+        }).then((res) => {
+               return res.data[0];
+
+            }
+        ).catch(function (error) {
+            console.log(error)
+            if (error === undefined || error.response === undefined) {
+                //that.props.history.push('/ss');
+            }
+        });
+    };
+
     //TODO: победителя добавить
     createGamesTable = () => {
         document.getElementById("gamesTable").innerText = "";
+        let that = this;
         this.state.games.forEach(function(element) {
             let dateB = new Date(element.startDate);
             let date = dateB.getDate() + '-' + (dateB.getMonth()+ 1) + '-' +  dateB.getFullYear();
             let type;
+            let winner;
+            axios({
+                method: 'get',
+                url: 'http://localhost:8080/hungergames/game/gameWinner?gameId=' + element.gameId,
+                withCredentials: true
+            }).then((res) => {
+                    winner =  res.data;
+                    console.log(res.data)
+                }
+            ).catch(function (error) {
+                console.log(error)
+                if (error === undefined || error.response === undefined) {
+                    //that.props.history.push('/ss');
+                }
+            });
+            console.log(winner)
             if (element.typeOfGame) {
                 type = "Обычная";
             } else {
@@ -70,7 +106,7 @@ constructor(props) {
                     '<tr><td class="head">Дата:</td><td>'+date+'</td></tr>' +
                     '<tr><td class="head">Длительность:</td><td>'+element.duration+' дней</td></tr>' +
                     '<tr><td class="head">Распорядитель:</td><td>'+element.steward.nick+'</td></tr>' +
-                    '<tr><td class="head">Победитель:</td><td>'+element.steward.nick+'</td></tr>' +
+                    '<tr><td class="head">Победитель:</td><td>'+winner.user.nick+'</td></tr>' +
                 '</table>' +
                 '</td><td><img class="gameHistImg" id="'+ element.gameId + '" src="data:image/png;base64,' + element.arena.mainLocation.picture +'" alt=""/></td></tr>' +
                 '</tbody>' +

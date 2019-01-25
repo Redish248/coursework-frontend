@@ -90,12 +90,14 @@ class Weapons extends Component {
         this.state.weapons.forEach(function(element) {
             document.getElementById('weaponTable').innerHTML +=
                 "<td>" +
+                '<div class="iconDiv">' +
                 "<p><img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' ></p>" +
                 '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
                 '<p>Радиус действия: ' + element.weapon.radiusOfAction +
                 '</p><p>Тип: ' + element.weapon.typeOfWeapon +
                 '</p><p>Урон: ' + element.weapon.damage +
                 '</p></span></div>' +
+                '</div>' +
                 "</td>"
 
         });
@@ -177,14 +179,13 @@ class Weapons extends Component {
     render() {
         return(
            <div>
-               <h3>Моё оружие</h3>
+               <h3>Моё оружие:</h3>
                <table>
                    <tbody>
                    <tr>
-                       <p>Выберите трибута для ударa:</p>
-                       <InputText value={this.state.defender} onChange={this.handleChange('defender')}/>
-
-                       <div id="weaponTable" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}/>
+                      Ударить: &nbsp;
+                       <InputText value={this.state.defender} onChange={this.handleChange('defender')} style={{width: 150}} placeholder="имя трибута"/>
+                       <div id="weaponTable" style={{height: 170, width: 400, overflowX: 'scroll'}}/>
                    </tr>
                    </tbody>
                </table>

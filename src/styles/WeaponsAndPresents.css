@@ -51,7 +51,23 @@
 }
 
 #presents, #weaponTable {
-    padding: 20px;
+    padding-top: 20px;
+    border-radius: 10px;
+    background-color: #beefff;
+}
+
+.iconDiv {
+    text-align: center;
+    width: 100px;
+    margin: 5px;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: #7f0676;
+    color: white;
+}
+
+p {
+    text-align: center;
 }
 
 .ok {
