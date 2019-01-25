@@ -1,11 +1,10 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {ProgressBar} from "primereact/components/progressbar/ProgressBar";
 import SockJsClient from "react-stomp";
 import * as axios from "axios";
 
 class TributeInfo extends Component {
 
-    //TODO: сюда данные передавать надо
     constructor(props) {
         super(props);
         this.state = {
@@ -24,7 +23,7 @@ class TributeInfo extends Component {
         });
     };
 
-    tributeHealth(){
+    tributeHealth() {
         let that = this;
         axios({
             method: 'get',
@@ -44,28 +43,37 @@ class TributeInfo extends Component {
         });
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.tributeHealth();
     }
 
 
     render() {
-        return(
+        return (
             <div>
                 <table>
                     <tbody>
-                    <tr><td>Информация о трибуте</td></tr>
-                    <tr><td>Здоровье:</td></tr>
-                    <tr><td><ProgressBar value={this.state.health}/></td></tr>
-                    <tr><td>Голод:</td></tr>
-                    <tr><td><ProgressBar value={this.state.hunger}/></td></tr>
-                    <tr><td>Жажда:</td></tr>
-                    <tr><td><ProgressBar value={this.state.thirst}/></td></tr>
-                </tbody>
+                    <tr>
+                        <td>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>Здоровье:</td>
+                                    <td><ProgressBar value={this.state.health}/></td>
+                                    <td>Голод:</td>
+                                    <td><ProgressBar value={this.state.hunger}/></td>
+                                    <td>Жажда:</td>
+                                    <td><ProgressBar value={this.state.thirst}/></td>
+                                </tr>
+                                </tbody></table>
+                        </td>
+
+                    </tr>
+                    </tbody>
                 </table>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/user/queue/health"]}
-                              onMessage={ this.onMessageReceive }
-                              debug={ false }/>
+                              onMessage={this.onMessageReceive}
+                              debug={false}/>
             </div>
         );
     }

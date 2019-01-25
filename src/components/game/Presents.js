@@ -80,7 +80,7 @@ class Presents extends Component {
         document.getElementById('presentTable').innerHTML = "";
         this.state.presents.forEach(function (element) {
             document.getElementById('presentTable').innerHTML +=
-                '<td>' +
+                '<td class="iconDiv">' +
                 '<p><img class="weaponImg" id="imgP' +element.sendingId +'" src="" alt=""></p>' +
                 '<div class="tooltip1">' + element.product.name +'<span class="tooltiptext1">' +
                 '<p>Тип: ' + element.product.typeOfPresent +
@@ -126,8 +126,8 @@ class Presents extends Component {
     render() {
         return(
             <div>
-                <h3>Мои подарки</h3>
-                <div id="presents" style={{height: 170, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}>
+                <h3>Мои подарки:</h3>
+                <div id="presents" style={{height: 170, width: 400,  overflowX: 'scroll'}}>
                     <table>
                         <tbody>
                         <tr id="presentTable"/>

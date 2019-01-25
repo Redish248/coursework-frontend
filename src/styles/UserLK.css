@@ -40,3 +40,12 @@
     height: 300px;
 }
 
+.userLK {
+    text-align: center;
+    display: inline-block;
+    margin: 5px;
+    border-radius: 10px;
+    background-color: #faffd4;
+    border: 2px solid brown;
+}
+
