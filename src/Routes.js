@@ -4,7 +4,6 @@ import NotFound from "./components/NotFound";
 import RegPage from "./components/wizard/RegPage";
 import LoginForm from "./components/LoginForm";
 import Home from "./components/Home";
-import MainPage from "./components/MainPage";
 import UserLK from "./components/UserLK";
 import GameHistory from "./components/GameHistory";
 import VisitorGame from "./components/visitor/VisitorGame";
@@ -16,7 +15,6 @@ export default () =>
     <Switch>
         <Route path="/login" exact component={LoginForm} />
         <Route path="/signup" exact component={RegPage}/>
-        <Route path="/main" component={MainPage}/>
         <Route path="/home" component={UserLK}/>
         <Route path="/game" component={GameTribute}/>
         <Route path="/adminGame" component={AdminGame}/>

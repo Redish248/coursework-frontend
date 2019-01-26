@@ -4,6 +4,7 @@ import * as axios from "axios";
 
 import "../styles/GameHistory.css";
 import Notification from "./Notification";
+import {Redirect} from "react-router";
 
 class GameHistory extends Component {
 constructor(props) {
@@ -34,17 +35,23 @@ constructor(props) {
     };
 
     render() {
-        return(
-            <div>
-                <UserNavigation/>
-                <div id="gamesTable"/>
-                <Notification/>
-            </div>
-        );
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            return (
+                <div>
+                    <UserNavigation/>
+                    <div id="gamesTable"/>
+                    <Notification/>
+                </div>
+            );
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 
     componentDidMount() {
-        this.getGames();
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            this.getGames();
+        }
     }
 
     getWinner = (element) => {

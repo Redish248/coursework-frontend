@@ -10,13 +10,12 @@ class GameNavigation extends Component {
     handleLogOut = (event) => {
         axios.post('http://localhost:8080/logout')
             .then(res => {
-                console.log('logout')
             }).catch((error)=> {
             if (error.response.status === 404) {
                 this.props.signOut();
+                window.sessionStorage.setItem('auth','false');
             }
         });
-
     };
 
     render() {

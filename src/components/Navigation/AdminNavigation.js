@@ -10,13 +10,13 @@ class UserNavigation extends Component {
     handleLogOut = (event) => {
         axios.post('http://localhost:8080/logout')
             .then(res => {
-                console.log('logout')
+             //
             }).catch((error)=> {
             if (error.response.status === 404) {
+                window.sessionStorage.setItem('auth','false');
                 this.props.signOut();
             }
         });
-
     };
 
     render() {
@@ -45,7 +45,7 @@ class UserNavigation extends Component {
                             </NavItem>
                         </Nav>
                         <Nav pullRight>
-                            <NavItem eventKey={1} href="/" onClick={this.handleLogOut}>
+                            <NavItem eventKey={5} href="/" onSelect={this.handleLogOut}>
                                 Выйти
                             </NavItem>
                         </Nav>

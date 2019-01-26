@@ -47,7 +47,7 @@ class Training extends Component {
 
             if(val >= 100) {
                 val = 100;
-                this.growl.showAttack({severity: 'info', summary: 'Success', detail: 'Process Completed'});
+                this.growl.show({severity: 'info', summary: 'Success', detail: 'Тренировка завершена'});
                 clearInterval(this.interval);
             }
 
@@ -66,11 +66,12 @@ class Training extends Component {
 
     render() {
         return (
-            <div>
+            <div id="currentTrain">
                 <p>Название тренировки: {this.props.train.name}</p>
                 <p>Длительность: {this.props.train.duration} минут</p>
                 <Growl ref={(el) => this.growl = el}/>
                 <ProgressBar value={this.state.percent} style={{width: 500}}/>
+                <br/>
                 <Button label="Завершить" onClick={this.finishTrain} />
             </div>
         );

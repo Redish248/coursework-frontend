@@ -5,6 +5,7 @@ import * as axios from "axios/index";
 import Map from "../game/Map";
 import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
+import {Redirect} from "react-router";
 
 class AdminGame extends Component {
     constructor(props) {
@@ -64,12 +65,17 @@ class AdminGame extends Component {
     };
 
     componentDidMount() {
-        this.getGame();
-        this.getTributes();
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            this.getGame();
+            this.getTributes();
+        }
     }
 
     render() {
-        return(
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            if (window.sessionStorage.getItem('status') === 'Распорядитель') {
+
+                return(
             <div>
                 <GameNavigation/>
                 <h2>Режим игры:</h2>
@@ -93,7 +99,14 @@ class AdminGame extends Component {
                 </table>
                 <Notification isGamePage={true} history={this.props.history}/>
             </div>
-        );
+        )
+
+            } else {
+                return <Redirect to="/home"/>
+            }
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 }
 

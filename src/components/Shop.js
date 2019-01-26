@@ -86,7 +86,7 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.state;
+        let pr = this;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Напиток') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
@@ -105,7 +105,7 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.state;
+        let pr = this;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Лекарства') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
@@ -125,7 +125,7 @@ class Shop extends Component {
             }
         });
 
-        let pr = this.state;
+        let pr = this;
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Инструменты') ) {
                 document.getElementById("img" + element.productId).src = "data:image/png;base64," + element.picture;
@@ -150,7 +150,7 @@ class Shop extends Component {
                 createProduct(element);
             }
         });
-        let pr = this.state;
+        let pr = this;
 
         this.state.products.forEach((element) => {
             if ((element.typeOfPresent === 'Другое') ) {

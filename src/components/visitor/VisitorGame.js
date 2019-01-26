@@ -8,6 +8,7 @@ import GameNavigation from "../Navigation/GameNavigation";
 import Map from "../game/Map";
 import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
+import {Redirect} from "react-router";
 
 class VisitorGame extends Component {
     constructor(props) {
@@ -50,7 +51,7 @@ class VisitorGame extends Component {
         }).then((res) => {
                 this.setState({
                     tribute: res.data,
-                    showAttack: true
+                    show: true
                 });
             }
         ).catch(function (error) {
@@ -69,7 +70,7 @@ class VisitorGame extends Component {
 
     handleHide = () => {
       this.setState({
-          showAttack: false
+          show: false
       })
     };
 
@@ -99,11 +100,13 @@ class VisitorGame extends Component {
     };
 
     render() {
-        return (
-            <div>
-                <GameNavigation/>
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            if (window.sessionStorage.getItem('status') === 'Наблюдатель') {
+                return (
+                    <div>
+                        <GameNavigation/>
 
-                <Modal show={this.state.show} onHide={() => this.setState({ showAttack: false })} container={this} aria-labelledby="contained-modal-title">
+                <Modal show={this.state.show} onHide={() => this.setState({ show: false })} container={this} aria-labelledby="contained-modal-title">
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title">
                             Магазин
@@ -117,29 +120,43 @@ class VisitorGame extends Component {
                     </Modal.Footer>
                 </Modal>
 
-                <h2>Режим игры:</h2>
-                <table id="gameVisitor">
-                    <tbody>
-                    <tr>
-                        <td><Map status="visitor"/></td>
-                        <td>
-                            <h3>Отправить подарок трибуту:</h3>
-                            <Button label="Перейти в магазин" onClick={() => {this.setState({showAttack: true})}}/>
-                            <p>Трибуты:</p>
-                            <div id="resultTributes" style={{width: 300, height: 300, overflowY: 'scroll', backgroundColor: 'white'}}>
-                                <center>
-                                    <DataTable id="tributeTable" value={this.state.tributes}>
-                                        <Column field="user.nick" header="Имя"/>
-                                    </DataTable>
-                                </center>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Notification isGamePage={true} history={this.props.history}/>
-            </div>
-        );
+                        <h2>Режим игры:</h2>
+                        <table id="gameVisitor">
+                            <tbody>
+                            <tr>
+                                <td><Map status="visitor"/></td>
+                                <td>
+                                    <h3>Отправить подарок трибуту:</h3>
+                                    <Button label="Перейти в магазин" onClick={() => {
+                                        this.setState({show: true})
+                                    }}/>
+                                    <p>Трибуты:</p>
+                                    <div id="resultTributes"
+                                         style={{
+                                             width: 300,
+                                             height: 300,
+                                             overflowY: 'scroll',
+                                             backgroundColor: 'white'
+                                         }}>
+                                        <center>
+                                            <DataTable id="tributeTable" value={this.state.tributes}>
+                                                <Column field="user.nick" header="Имя"/>
+                                            </DataTable>
+                                        </center>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <Notification isGamePage={true} history={this.props.history}/>
+                    </div>
+                );
+            } else {
+                return <Redirect to="/home"/>
+            }
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 }
 

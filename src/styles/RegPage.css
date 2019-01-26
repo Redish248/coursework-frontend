@@ -3,7 +3,7 @@
     display: inline-block;
     padding: 20px;
     border-radius: 15px;
-    background: url('../images/br.jpg') no-repeat fixed center center;
+    background-color: rgba(250, 253, 219, 0.9);
     color: #000000;
     border: 1px solid blue;
     filter: alpha(Opacity=70);

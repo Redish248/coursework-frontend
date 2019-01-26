@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {signIn} from "../actions/actions";
 import * as axios from "axios";
 import "../styles/RegPage.css";
+import {Redirect} from "react-router";
 
  class LoginForm extends Component {
     constructor(props) {
@@ -40,8 +41,8 @@ import "../styles/RegPage.css";
             }).then(response => {
                     if (response !== undefined) {
                         this.props.signIn(this.state.nick);
+                        window.sessionStorage.setItem('auth','true');
                         this.props.history.push('/home');
-                        console.log('login')
                     }
                 }
             ).catch(function (error) {
@@ -56,18 +57,24 @@ import "../styles/RegPage.css";
      };
 
     render() {
-        return(
-            <div className="step">
-                <NavigationHome/>
-                <h2>Вход:</h2>
-                <div id="errorL"/>
-                <h4>Введите ник:</h4>
-                <InputText keyfilter={/[^\s]/} value={this.state.nick} onChange={this.handleChange('nick')}/>
-                <h4>Введите пароль:</h4>
-                <Password keyfilter={/[^\s]/} feedback={false} value={this.state.password} onChange={this.handleChange('password')}/>
-                <p><Button label="Войти" onClick={this.clickButton}/></p>
-            </div>
-        );
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            return <Redirect to="/home"/>
+        } else {
+            window.sessionStorage.setItem('auth', 'false');
+            return (
+                <div className="step">
+                    <NavigationHome/>
+                    <h2>Вход:</h2>
+                    <div id="errorL"/>
+                    <h4>Введите ник:</h4>
+                    <InputText keyfilter={/[^\s]/} value={this.state.nick} onChange={this.handleChange('nick')}/>
+                    <h4>Введите пароль:</h4>
+                    <Password keyfilter={/[^\s]/} feedback={false} value={this.state.password}
+                              onChange={this.handleChange('password')}/>
+                    <p><Button label="Войти" onClick={this.clickButton}/></p>
+                </div>
+            );
+        }
     }
 }
 

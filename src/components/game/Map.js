@@ -258,8 +258,11 @@ class Map extends Component {
             let x = (element.xcoordinate - 1) * imgSize;
             let y = (element.ycoordinate - 1) * imgSize;
             img.onload = function () {
-                ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
-                ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
+                //TODO: Только видимая область
+                //if (( x - (curX - xStart) * imgSize < 700) && ( y - (curY - yStart) * imgSize < 700 )) {
+                    ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
+                    ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
+               // }
             };
             img.src = "data:image/png;base64," + loc[element.locationId - 1].picture;
         });

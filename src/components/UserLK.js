@@ -12,6 +12,7 @@ import VisitorNavigation from "./Navigation/VisitorNavigation";
 import AdminNavigation from "./Navigation/AdminNavigation";
 import TributeNavigation from "./Navigation/TributeNavigation";
 import Notification from "./Notification";
+import {Redirect} from "react-router";
 
 class UserLK extends Component {
     constructor(props) {
@@ -88,7 +89,7 @@ class UserLK extends Component {
             }).then((res) => {
                     this.setState({
                         user: res.data,
-                        showAttack: false,
+                        show: false,
                         password: '',
                         newPassword: '',
                         pass: ''
@@ -149,6 +150,7 @@ class UserLK extends Component {
     };
 
     createTrainIcons = () => {
+        document.getElementById('finish').style.display = 'block';
         this.state.trainings.forEach((element) => {
             document.getElementById("train").innerHTML +=
                 '<div class="newTrain"><table><tbody>' +
@@ -166,6 +168,7 @@ class UserLK extends Component {
             let button = document.getElementById(element.trainingId);
             button.onclick = function () {
                 changeState(element);
+                document.getElementById('finish').style.display = 'none';
             }
         });
 
@@ -177,7 +180,7 @@ class UserLK extends Component {
                     currentTrain: element
                 });
             } else {
-                this.messages.showAttack({severity: 'error', summary: 'Ошибка!', detail: 'Недостаточно средств'});
+                this.messages.show({severity: 'error', summary: 'Ошибка!', detail: 'Недостаточно средств'});
             }
         }
 
@@ -205,6 +208,7 @@ class UserLK extends Component {
                     })
                 }
                 document.getElementById('avatar').src = "data:image/png;base64," + this.state.user.picture;
+                window.sessionStorage.setItem('status',res.data.status.name.toString());
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -214,91 +218,94 @@ class UserLK extends Component {
     };
 
     componentDidMount() {
-        this.getSkills();
-        this.getUserInfo();
-        this.setState({
-            day: new Date().getDay(),
-        });
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            this.getSkills();
+            this.getUserInfo();
+            this.setState({
+                day: new Date().getDay(),
+            });
+        }
     }
 
 
     render() {
-        let dateB = new Date(this.state.user.birthday);
-        let date = dateB.getDate() + '-' + (dateB.getMonth() + 1) + '-' + dateB.getFullYear();
-        return (
-            <div className="userLK">
-                {
-                    this.state.status === "Наблюдатель"
-                        ? <VisitorNavigation/>
-                        : null
-                }
-                {
-                    this.state.status === "Распорядитель"
-                        ? <AdminNavigation/>
-                        : null
-                }
-                {
-                    this.state.status === "Трибут"
-                        ? <TributeNavigation/>
-                        : null
-                }
-                <table id="mainTable">
-                    <tbody>
-                    <tr>
-                        <td>
-                            <div>
-                                <img id="avatar" src="" alt=""/>
-                            </div>
-                            <p>Ник: {this.state.user.nick} </p>
-                        </td>
-                        <td>
-                            <p>Данные о пользователе:</p>
-                            <table id="userDataTable">
-                                <tbody>
-                                <tr>
-                                    <td className="user">Имя:</td>
-                                    <td>{this.state.user.name}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Фамилия:</td>
-                                    <td>{this.state.user.surname}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Пол:</td>
-                                    <td>{this.state.sex}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Дата рождения:</td>
-                                    <td>{date}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Рост:</td>
-                                    <td>{this.state.user.height}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Вес:</td>
-                                    <td>{this.state.user.weight}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Дистрикт:</td>
-                                    <td>{this.state.district}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Статус:</td>
-                                    <td>{this.state.status}</td>
-                                </tr>
-                                <tr>
-                                    <td className="user">Баланс:</td>
-                                    <td>{this.state.user.cash}</td>
-                                </tr>
-                                </tbody>
-                            </table>
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            let dateB = new Date(this.state.user.birthday);
+            let date = dateB.getDate() + '-' + (dateB.getMonth() + 1) + '-' + dateB.getFullYear();
+            return (
+                <div className="userLK">
+                    {
+                        this.state.status === "Наблюдатель"
+                            ? <VisitorNavigation/>
+                            : null
+                    }
+                    {
+                        this.state.status === "Распорядитель"
+                            ? <AdminNavigation/>
+                            : null
+                    }
+                    {
+                        this.state.status === "Трибут"
+                            ? <TributeNavigation/>
+                            : null
+                    }
+                    <table id="mainTable">
+                        <tbody>
+                        <tr>
+                            <td id="td1">
+                                <div>
+                                    <img id="avatar" src="" alt=""/>
+                                </div>
+                                <p>Ник: {this.state.user.nick} </p>
+                            </td>
+                            <td id="td2">
+                                <p>Данные о пользователе:</p>
+                                <table id="userDataTable">
+                                    <tbody>
+                                    <tr>
+                                        <td className="user">Имя:</td>
+                                        <td>{this.state.user.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Фамилия:</td>
+                                        <td>{this.state.user.surname}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Пол:</td>
+                                        <td>{this.state.sex}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Дата рождения:</td>
+                                        <td>{date}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Рост:</td>
+                                        <td>{this.state.user.height}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Вес:</td>
+                                        <td>{this.state.user.weight}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Дистрикт:</td>
+                                        <td>{this.state.district}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Статус:</td>
+                                        <td>{this.state.status}</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="user">Баланс:</td>
+                                        <td>{this.state.user.cash}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
 
                             <div className="modal-container">
-                                <Button bsstyle="primary" bssize="large" onClick={() => this.setState({showAttack: true})}
+                                <Button bsstyle="primary" bssize="large" onClick={() => this.setState({show: true})}
                                         label="Сменить пароль"/>
 
-                                <Modal show={this.state.show} onHide={() => this.setState({showAttack: false})}
+                                <Modal show={this.state.show} onHide={() => this.setState({show: false})}
                                        container={this} aria-labelledby="contained-modal-title">
                                     <Modal.Header closeButton>
                                         <Modal.Title id="contained-modal-title">
@@ -323,53 +330,61 @@ class UserLK extends Component {
                                     </Modal.Footer>
                                 </Modal>
 
-                                <br/>
+                                    <br/>
+                                    {
+                                        this.state.status === 'Наблюдатель'
+                                            ? <Button bsstyle="primary" bssize="large" onClick={this.handleShow}
+                                                      label="Потренироваться"/>
+                                            : null
+                                    }
+                                    <Modal show={this.state.showTr} onHide={() => this.setState({showTr: false})}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Тренировки</Modal.Title>
+                                        </Modal.Header>
 
-                                <Button bsstyle="primary" bssize="large" onClick={this.handleShow}
-                                        label="Потренироваться"/>
-                                <Modal show={this.state.showTr} onHide={() => this.setState({showTr: false})}>
-                                    <Modal.Header closeButton>
-                                        <Modal.Title>Тренировки</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Messages ref={(el) => this.messages = el}/>
-                                        {
-                                            this.state.showTrainInfo
-                                                ? <div id="train"/>
-                                                : null
-                                        }
-                                        {
-                                            this.state.showCurrentTrain
-                                                ? <Training train={this.state.currentTrain} finish={() => {
-                                                    document.getElementById('finish').click()
-                                                }}/>
-                                                : null
-                                        }
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button id="finish" onClick={this.handleEnd} label="Закрыть"/>
-                                    </Modal.Footer>
-                                </Modal>
-                            </div>
+                                        <Modal.Body>
+                                            <Messages ref={(el) => this.messages = el}/>
+                                            {
+                                                this.state.showTrainInfo
+                                                    ? <div id="train"/>
+                                                    : null
+                                            }
+                                            {
+                                                this.state.showCurrentTrain
+                                                    ? <Training train={this.state.currentTrain} finish={() => {
+                                                        document.getElementById('finish').click()
+                                                    }}/>
+                                                    : null
+                                            }
 
-                        </td>
-                        <td>
-                            <div id="resultSkill">
-                                <p>Мои навыки:</p>
-                                <center>
-                                    <DataTable id="skillTable" value={this.state.skills}>
-                                        <Column field="skill.name" header="Название"/>
-                                        <Column field="levelOfSkill" header="Коэффициент владения"/>
-                                    </DataTable>
-                                </center>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <Notification/>
-            </div>
-        );
+                                        </Modal.Body>
+                                        <Modal.Footer>
+                                            <Button id="finish" onClick={this.handleEnd} label="Закрыть"/>
+                                        </Modal.Footer>
+                                    </Modal>
+                                </div>
+
+                            </td>
+                            <td id="td3">
+                                <div id="resultSkill">
+                                    <p>Мои навыки:</p>
+                                    <center>
+                                        <DataTable id="skillTable" value={this.state.skills}>
+                                            <Column field="skill.name" header="Название"/>
+                                            <Column field="levelOfSkill" header="Коэффициент владения"/>
+                                        </DataTable>
+                                    </center>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <Notification/>
+                </div>
+            );
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 }
 

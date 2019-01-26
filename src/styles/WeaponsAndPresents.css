@@ -80,3 +80,7 @@ p {
 .weap {
     width: 70px;
 }
+
+#allPresents td {
+    padding: 5px;
+}

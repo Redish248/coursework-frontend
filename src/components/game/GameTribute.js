@@ -7,6 +7,7 @@ import Notification from "../Notification";
 import * as axios from "axios/index";
 import GameNavigation from "../Navigation/GameNavigation";
 import Map from "./Map";
+import {Redirect} from "react-router";
 
 class GameTribute extends Component {
     constructor(props) {
@@ -60,39 +61,49 @@ class GameTribute extends Component {
     };
 
     componentDidMount() {
-        this.getUserInfo();
-        this.getGame();
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            this.getUserInfo();
+            this.getGame();
+        }
     }
 
     render() {
-        return (
-            <div>
-                <GameNavigation/>
-                <div id="gameTribute">
-                    <table className="gameMain">
-                        <tbody>
-                        <tr>
-                            <td colSpan="2" align="left">
-                                <h2>Режим игры</h2>
-                                <TributeInfo/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><Map nick={this.state.nick} status="tribute"/></td>
-                            <td valign="top" align="left">
-                                <p>Вы: {this.state.user.nick}</p>
-                                <Weapons weaponToAdd={this.state.weaponToAdd}/>
-                                <Presents/>
-                                <br/>
-                                <Chat user={this.state.user}/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <Notification isGamePage={true} history={this.props.history}/>
-                </div>
-            </div>
-        );
+        if (window.sessionStorage.getItem('auth') === 'true') {
+            if (window.sessionStorage.getItem('status') === 'Трибут') {
+                return (
+                    <div>
+                        <GameNavigation/>
+                        <div id="gameTribute">
+                            <table className="gameMain">
+                                <tbody>
+                                <tr>
+                                    <td colSpan="2" align="left">
+                                        <h2>Режим игры</h2>
+                                        <TributeInfo/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><Map nick={this.state.nick} status="tribute"/></td>
+                                    <td valign="top" align="left">
+                                        <p>Вы: {this.state.user.nick}</p>
+                                        <Weapons weaponToAdd={this.state.weaponToAdd}/>
+                                        <Presents/>
+                                        <br/>
+                                        <Chat user={this.state.user}/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <Notification isGamePage={true} history={this.props.history}/>
+                        </div>
+                    </div>
+                );
+            } else {
+                return <Redirect to="/home"/>
+            }
+        } else {
+            return <Redirect to="/"/>
+        }
     }
 }
 

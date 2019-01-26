@@ -56,8 +56,7 @@ class Notification extends Component {
         );
         return (
             <div>
-                {/*FIXME: first growl hidden under header*/}
-                <Growl ref={(el) => this.growl = el}/>
+                <Growl style={{marginTop: 50}} ref={(el) => this.growl = el}/>
                 <Dialog header={this.state.title} footer={footer} visible={this.state.show} modal={true} onHide={this.onHide}>
                     {this.state.content}
                 </Dialog>

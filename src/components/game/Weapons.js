@@ -104,6 +104,11 @@ class Weapons extends Component {
             document.getElementById("imgW" + element.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
             document.getElementById("imgW" + element.weaponInGameId).onclick = () => {
                 that.activateWeapon(element.weapon.name);
+                let mas = document.getElementsByClassName("iconDiv");
+                Array.prototype.forEach.call(mas, function(el) {
+                    el.style.backgroundColor = "#7f0676";
+                });
+                document.getElementById("imgW" + element.weaponInGameId).parentElement.parentElement.style.backgroundColor = 'red';
             }
         });
     };

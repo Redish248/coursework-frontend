@@ -47,7 +47,7 @@
     display: inline-block;
     margin: 5px;
     border-radius: 10px;
-    background: url('../images/br.jpg') no-repeat fixed center center;
+    background-color: rgba(250, 253, 219, 0.9);
     border: 2px solid brown;
 }
 
@@ -85,5 +85,10 @@
 .trainName {
     font-weight: bold;
 }
+
+#currentTrain {
+    font-size: 20px;
+}
+
 
 

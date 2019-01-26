@@ -22,7 +22,6 @@ class Step3 extends Component {
         if ((this.state.pass !== this.state.password) || (this.state.password === '') || (this.state.nick === '')) {
             document.getElementById('error').innerText = "Проверьте данные!";
         } else {
-            alert("kek")
             let that = this;
             event.preventDefault();
             let formData = new FormData();
@@ -50,6 +49,7 @@ class Step3 extends Component {
                     data: formData,
                     withCredentials: true
                 }).then(response => {
+                        window.sessionStorage.setItem('auth','true');
                         this.props.history.push('/home');
                     }
                 );
