@@ -24,30 +24,35 @@ import "../styles/RegPage.css";
     };
 
     clickButton = () => {
-        let that = this;
-         let formData = new FormData();
-         formData.set('username', this.state.nick);
-         formData.set('password', this.state.password);
-         axios({
-             method: 'post',
-             url: 'http://localhost:8080/login',
-             data: formData,
-             withCredentials: true
-         }).then(response => {
-             if (response !== undefined) {
-                 this.props.signIn(this.state.nick);
-                 this.props.history.push('/home');
-                 console.log('login')
-             }
-             }
-         ).catch(function (error) {
-             if (error === undefined || error.response === undefined) {
-                 that.props.history.push('/ss');
-             }
-             if (error.response.status === 401) {
-                 document.getElementById('error').innerText = "Неверный логин или пароль!";
-             }
-         });
+        if ((this.state.nick === '') || (this.state.password === '')) {
+            document.getElementById('errorL').innerText = "Введите данные!";
+        } else {
+            document.getElementById('errorL').innerText = "";
+            let that = this;
+            let formData = new FormData();
+            formData.set('username', this.state.nick);
+            formData.set('password', this.state.password);
+            axios({
+                method: 'post',
+                url: 'http://localhost:8080/login',
+                data: formData,
+                withCredentials: true
+            }).then(response => {
+                    if (response !== undefined) {
+                        this.props.signIn(this.state.nick);
+                        this.props.history.push('/home');
+                        console.log('login')
+                    }
+                }
+            ).catch(function (error) {
+                if (error === undefined || error.response === undefined) {
+                    that.props.history.push('/ss');
+                }
+                if (error.response.status === 401) {
+                    document.getElementById('errorL').innerText = "Неверный логин или пароль!";
+                }
+            });
+        }
      };
 
     render() {
@@ -55,11 +60,11 @@ import "../styles/RegPage.css";
             <div className="step">
                 <NavigationHome/>
                 <h2>Вход:</h2>
+                <div id="errorL"/>
                 <h4>Введите ник:</h4>
-                <InputText value={this.state.nick} onChange={this.handleChange('nick')}/>
+                <InputText keyfilter={/[^\s]/} value={this.state.nick} onChange={this.handleChange('nick')}/>
                 <h4>Введите пароль:</h4>
-                <Password feedback={false} value={this.state.password} onChange={this.handleChange('password')}/>
-                <div id="error"/>
+                <Password keyfilter={/[^\s]/} feedback={false} value={this.state.password} onChange={this.handleChange('password')}/>
                 <p><Button label="Войти" onClick={this.clickButton}/></p>
             </div>
         );

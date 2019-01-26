@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import * as axios from "axios/index";
 import "../../styles/WeaponsAndPresents.css";
-import {InputText} from "primereact/components/inputtext/InputText";
-import {Button} from "primereact/components/button/Button";
 import SockJsClient from "react-stomp";
 
 class Weapons extends Component {
@@ -86,13 +84,13 @@ class Weapons extends Component {
 
 
     createWeaponIcons = () => {
-        document.getElementById('weaponTable').innerHTML = "";
+        document.getElementById('weaponTr').innerHTML = "";
         this.state.weapons.forEach(function(element) {
-            document.getElementById('weaponTable').innerHTML +=
+            document.getElementById('weaponTr').innerHTML +=
                 "<td>" +
                 '<div class="iconDiv">' +
-                "<p><img class='weaponImg' id='imgW" +element.weapon.weaponInGameId +"' src='' alt='' ></p>" +
-                '<div class="tooltip1">' + element.weapon.name +'<span class="tooltiptext1">' +
+                "<p><img class='weaponImg' id='imgW" +element.weaponInGameId +"' src='' alt='' ></p>" +
+                '<div class="tooltip1" style="width: 100px">' + element.weapon.name +'<span class="tooltiptext1" style="width: 120px; font-size: 10px">' +
                 '<p>Радиус действия: ' + element.weapon.radiusOfAction +
                 '</p><p>Тип: ' + element.weapon.typeOfWeapon +
                 '</p><p>Урон: ' + element.weapon.damage +
@@ -103,8 +101,8 @@ class Weapons extends Component {
         });
         let that = this;
         this.state.weapons.forEach((element) => {
-            document.getElementById("imgW" + element.weapon.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
-            document.getElementById("imgW" + element.weapon.weaponInGameId).onclick = () => {
+            document.getElementById("imgW" + element.weaponInGameId).src = "data:image/png;base64," + element.weapon.picture;
+            document.getElementById("imgW" + element.weaponInGameId).onclick = () => {
                 that.activateWeapon(element.weapon.name);
             }
         });
@@ -183,7 +181,13 @@ class Weapons extends Component {
                <table>
                    <tbody>
                    <tr>
-                       <div id="weaponTable" style={{height: 150, width: 400, backgroundColor: 'white', overflowX: 'scroll'}}/>
+                       <div id="weaponTable" style={{height: 170, width: 400,  overflowX: 'scroll'}}>
+                           <table>
+                               <tbody>
+                               <tr id="weaponTr"/>
+                               </tbody>
+                           </table>
+                       </div>
                    </tr>
                    </tbody>
                </table>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import * as axios from "axios/index";
 import {Spinner} from "primereact/components/spinner/Spinner";
 import {Calendar} from "primereact/components/calendar/Calendar";
@@ -40,7 +40,7 @@ class CreateGame extends Component {
             data: formData,
             withCredentials: true
         }).then((res) => {
-                if (res.data.gameId===undefined){
+                if (res.data.gameId === undefined) {
                     //FIXME: тоже под хедером не видно
                     this.messages.show({sticky: true, severity: 'error', summary: 'Ошибка', detail: res.data});
                 } else {
@@ -65,21 +65,36 @@ class CreateGame extends Component {
         let maxDate = new Date();
         maxDate.setMonth(nextMonth);
 
-        return(
-            <div>
+        return (
+            <div id="createGame">
                 <Messages ref={(el) => this.messages = el}></Messages>
                 <AdminNavigation/>
                 <h2>Параметры игры:</h2>
-                <p>Тип игры:</p>
-                <Dropdown value={this.state.type} options={gameType} onChange={this.handleChange('type')} placeholder="Выберите тип игры"/>
-                <p>Тип локации:</p>
-                <Dropdown value={this.state.location} options={locationType} onChange={this.handleChange('location')} placeholder="Выберите локацию"/>
-                <p>Ширина:</p>
-                <Spinner min={0} max={10000} value={this.state.length} onChange={this.handleChange('length')}/>
-                <p>Высота:</p>
-                <Spinner min={0} max={10000} value={this.state.width} onChange={this.handleChange('width')}/>
+                <table>
+                    <tbody>
+                    <tr>
+                    <td>Тип игры:</td>
+                    <td><Dropdown value={this.state.type} options={gameType} onChange={this.handleChange('type')}
+                                  placeholder="Выберите тип игры"/></td>
+                    </tr>
+                    <tr>
+                    <td>Тип локации:</td>
+                    <td><Dropdown value={this.state.location} options={locationType}
+                                  onChange={this.handleChange('location')} placeholder="Выберите локацию"/></td>
+                    </tr>
+                    <tr>
+                    <td>Ширина:</td>
+                        <td><Spinner readonly min={10} max={50} value={this.state.length} onChange={this.handleChange('length')}/></td>
+                    </tr>
+                    <tr>
+                    <td>Высота:</td>
+                        <td><Spinner readonly min={10} max={50} value={this.state.width} onChange={this.handleChange('width')}/></td>
+                    </tr>
+                    </tbody>
+                </table>
                 <p>Дата начала:</p>
-                <Calendar  inline={true} dateFormat="dd/mm/yy" minDate={today} maxDate={maxDate} value={this.state.date} onChange={this.handleChange('date')}/>
+                <Calendar inline={true} dateFormat="dd/mm/yy" minDate={today} maxDate={maxDate} value={this.state.date}
+                          onChange={this.handleChange('date')}/>
 
                 <p><Button label="Создать игру" onClick={this.createGame}/></p>
                 <Notification/>
@@ -95,10 +110,12 @@ const gameType = [
 
 const locationType = [
     {label: 'Лес', value: 'Лес'},
-    {label: 'Снежная', value: 'Снежная'},
+    {label: 'Пустыня', value: 'Пустыня'},
     {label: 'Тропический лес', value: 'Тропический лес'},
     {label: 'Водная', value: 'Водная'},
-    {label: 'Тайга', value: 'Тайга'}
+    {label: 'Горы', value: 'Горы'},
+    {label: 'Равнина', value: 'Равнина'},
+    {label: 'Болото', value: 'Болото'}
 ];
 
 export default CreateGame;

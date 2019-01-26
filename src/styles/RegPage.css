@@ -3,7 +3,7 @@
     display: inline-block;
     padding: 20px;
     border-radius: 15px;
-    background-color: rgba(250, 253, 219, 0.9);
+    background: url('../images/br.jpg') no-repeat fixed center center;
     color: #000000;
     border: 1px solid blue;
     filter: alpha(Opacity=70);
@@ -11,4 +11,17 @@
 
 .hidden {
     display: none;
+}
+
+#error, #error1, #error2, #errorL, #errorPass {
+    font-size: 14px;
+    color: red;
+}
+
+.step table {
+    text-align: center;
+}
+
+.fileInput {
+    font-size: 20px;
 }

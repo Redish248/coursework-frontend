@@ -80,9 +80,10 @@ class GameTribute extends Component {
                         <tr>
                             <td><Map nick={this.state.nick} status="tribute"/></td>
                             <td valign="top" align="left">
-                                Вы: {this.state.user.nick}
+                                <p>Вы: {this.state.user.nick}</p>
                                 <Weapons weaponToAdd={this.state.weaponToAdd}/>
                                 <Presents/>
+                                <br/>
                                 <Chat user={this.state.user}/>
                             </td>
                         </tr>

@@ -58,6 +58,7 @@ class Shop extends Component {
         });
     };
 
+    //TODO: количество подарков при отправке
     sendPresent = (product, count) => {
         let formData = new FormData();
         formData.set('nick', this.state.nick);
@@ -201,24 +202,3 @@ const createProduct = (element) => {
 
 };
 
-//TODO: количество подарков при отправке
-const sendPresent = (product, tribute, count) => {
-    console.log(tribute)
-    let formData = new FormData();
-    formData.set('tributeID', tribute.tributeId.toString());
-    formData.set('presentID', product.productId.toString());
-    formData.set('quantity', count.toString());
-    axios({
-        method: 'post',
-        url: 'http://localhost:8080/hungergames/game/send_present',
-        data: formData,
-        withCredentials: true
-    }).then((res) => {
-           console.log("Доставлено!")
-        }
-    ).catch(function (error) {
-        if (error === undefined || error.response === undefined) {
-           console.log("Ошибка при отправке подарка")
-        }
-    });
-};

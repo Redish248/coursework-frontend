@@ -14,8 +14,13 @@ class Step1 extends Component {
     }
 
     clickButton = () => {
-        this.props.signUp1(this.state.name, this.state.surname);
-        this.props.goToStep(2);
+        if ((this.state.name === '') || (this.state.surname === '')) {
+            document.getElementById('error1').innerText = "Введите данные!";
+        } else {
+            document.getElementById('error1').innerText = "";
+            this.props.signUp1(this.state.name, this.state.surname);
+            this.props.goToStep(2);
+        }
     };
 
     handleChange = name => event => {
@@ -31,9 +36,10 @@ class Step1 extends Component {
                 <h2>Регистрация</h2>
                 <h3>Шаг {this.props.currentStep}</h3>
                 <h4>Имя:</h4>
-                <InputText placeholder="name" value={this.state.name} onChange={this.handleChange('name')}/>
+                <InputText keyfilter={/[^\s]/} placeholder="имя" value={this.state.name} onChange={this.handleChange('name')}/>
                 <h4>Фамилия:</h4>
-                <InputText placeholder="surname" value={this.state.surname} onChange={this.handleChange('surname')}/>
+                <InputText keyfilter={/[^\s]/} placeholder="фамилия" value={this.state.surname} onChange={this.handleChange('surname')}/>
+                <div id="error1"/>
                 <p><Button onClick={this.clickButton} label="Вперёд"/></p>
             </div>
         );

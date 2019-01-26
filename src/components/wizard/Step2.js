@@ -14,7 +14,7 @@ class Step2 extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sex: '',
+            sex: 'false',
             weight: 30,
             height: 150,
             birthday: new Date(),
@@ -31,8 +31,17 @@ class Step2 extends Component {
 
 
     clickButton = () => {
-        this.props.signUp2(this.state.sex, this.state.height, this.state.weight,  this.state.birthday.getTime(), this.state.file);
-        this.props.goToStep(3);
+        if (this.state.file.size >= 1048576 ) {
+            document.getElementById('error2').innerText = "Размер файла не больше 1MB!";
+        } else {
+            if (this.state.file === null) {
+                document.getElementById('error2').innerText = "Выберите изображение!";
+            } else {
+                document.getElementById('error2').innerText = "";
+                this.props.signUp2(this.state.sex, this.state.height, this.state.weight, this.state.birthday.getTime(), this.state.file);
+                this.props.goToStep(3);
+            }
+        }
     };
 
     _handleImageChange(e) {
@@ -54,16 +63,19 @@ class Step2 extends Component {
                 <input className="fileInput"
                        type="file"
                        onChange={(e)=>this._handleImageChange(e)} />
+                <div id="error2"/>
                 <h4>Пол:</h4>
                 <SelectButton options={genderItems} value={this.state.sex} onChange={this.handleChange('sex')} />
                 <h4>Дата рождения:</h4>
-                <Calendar  dateFormat="dd/mm/yy" monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
+                <Calendar readonly dateFormat="dd/mm/yy" monthNavigator={true} yearNavigator={true} yearRange="1980:2007" value={this.state.birthday} onChange={this.handleChange('birthday')}/>
                 <h4>Рост:</h4>
-                <Spinner  min={100} max={210} value={this.state.height} onChange={this.handleChange('height')} />
+                <Spinner readonly  min={100} max={210} value={this.state.height} onChange={this.handleChange('height')} />
                 <h4>Вес:</h4>
-                <Spinner min={20} max={100} value={this.state.weight} onChange={this.handleChange('weight')}/>
-                <p><Button onClick={this.clickButton} label="Вперёд"/></p>
-                <p><Button onClick={this.props.previousStep} label="Назад"/></p>
+                <Spinner readonly min={20} max={100} value={this.state.weight} onChange={this.handleChange('weight')}/>
+                <br/>
+                <Button onClick={this.clickButton} label="Вперёд"/>
+                <br/>
+                <Button onClick={this.props.previousStep} label="Назад"/>
             </div>
         );
     }

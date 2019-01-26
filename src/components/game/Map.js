@@ -208,6 +208,7 @@ class Map extends Component {
                 this.moveCanvas(this.state.curX, this.state.curY, true);
             }
         ).catch(function (error) {
+            console.log(error)
             if (error === undefined || error.response === undefined) {
                 that.props.history.push('/ss');
             }
@@ -233,7 +234,6 @@ class Map extends Component {
 
     moveCanvas = (curX, curY, changeFlag) => {
         let imgSize = 100, xStart = 4, yStart = 4;
-        let st = this.state;
         let loc = this.state.locations;
         const canvas = this.refs.map;
         const ctx = canvas.getContext("2d");
@@ -251,7 +251,7 @@ class Map extends Component {
         let userImg = new Image();
         userImg.onload = function () {
             ctx.drawImage(userImg, 310,310,70,70);
-            ctx.fillStyle = "#FFF";
+            ctx.fillStyle = "#000";
             ctx.font = "italic 15pt Arial";
             ctx.fillText(name, 315, 390);
         };
@@ -264,7 +264,7 @@ class Map extends Component {
                 let tributesImg = new Image();
                 tributesImg.onload = function () {
                     ctx.drawImage(tributesImg, 310 + (tribute.x - curX) * imgSize, 310 + (tribute.y - curY) * imgSize, 70, 70);
-                    ctx.fillStyle = "#FFF";
+                    ctx.fillStyle = "#000";
                     ctx.font = "italic 14pt Arial";
                     ctx.fillText(tribute.nick,  310 + (tribute.x - curX) * imgSize, 390 + (tribute.y - curY) * imgSize);
                 };

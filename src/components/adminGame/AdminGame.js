@@ -4,8 +4,9 @@ import GameNavigation from "../Navigation/GameNavigation";
 import * as axios from "axios/index";
 import {InputText} from "primereact/components/inputtext/InputText";
 import {Button} from "primereact/components/button/Button";
-import AdminMap from "./AdminMap";
 import Map from "../game/Map";
+import {DataTable} from "primereact/components/datatable/DataTable";
+import {Column} from "primereact/components/column/Column";
 
 class AdminGame extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class AdminGame extends Component {
             game: [],
             x: 0,
             y: 0,
-            hookName: ''
+            hookName: '',
+            tributes: []
         })
     }
 
@@ -66,8 +68,29 @@ class AdminGame extends Component {
         });
     }
 
+    getTributes = () => {
+        let that = this;
+        let url = 'http://localhost:8080/hungergames/game/get_tributes_of_game';
+        axios({
+            method: 'get',
+            url: url,
+            withCredentials: true
+        }).then((res) => {
+                this.setState({
+                    tributes: res.data,
+                });
+            }
+        ).catch(function (error) {
+            console.log(error);
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    };
+
     componentDidMount() {
         this.getGame();
+        this.getTributes();
     }
 
     //TODO: для ловушек надо кликать на карту, будет вылезать окно, там список ловушек. Выбираешь - она устанавливется
@@ -75,7 +98,8 @@ class AdminGame extends Component {
         return(
             <div>
                 <GameNavigation/>
-                <table>
+                <h2>Режим игры:</h2>
+                <table id="gameAdmin">
                     <tbody>
                     <tr>
                         <td><Map status="admin"/></td>
@@ -88,6 +112,15 @@ class AdminGame extends Component {
                             <p>Координата Y:</p>
                             <p><InputText value={this.state.y} onChange={this.handleChange('y')}/></p>
                             <Button label="Создать" onCLick={this.createHook}/>
+                            <br/><br/>
+                            <div id="resultTributes" style={{width: 200, height: 250, overflowY: 'scroll', backgroundColor: 'white'}}>
+                                <p>Список трибутов:</p>
+                                <center>
+                                    <DataTable id="tributeTable" value={this.state.tributes}>
+                                        <Column field="user.nick" header="Имя"/>
+                                    </DataTable>
+                                </center>
+                            </div>
                         </td>
                     </tr>
                     </tbody>

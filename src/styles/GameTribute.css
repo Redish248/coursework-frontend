@@ -1,5 +1,5 @@
 #maps {
-    background-color: rgba(28, 196, 52, 0.9);
+    background: url('../images/map.jpg') no-repeat fixed center center;
     border: 3px solid black;
     border-radius: 8px;
 }
@@ -18,16 +18,25 @@
     padding-left: 10px;
 }
 
-#gameTribute {
+#gameTribute, #gameVisitor, #gameAdmin, #createGame {
     display: inline-block;
     padding: 20px;
     border-radius: 15px;
-    background-color: rgba(247, 245, 145, 0.9);
+    background: url('../images/br.jpg') no-repeat fixed center center;
     color: #000000;
     border: 1px solid black;
     opacity: initial;
 }
 
-.talk-box-body {
-    height: 100px
+#gameVisitor td, #gameAdmin td, #createGame td {
+    padding: 8px;
+}
+
+#id-1-1 {
+    height: 130px;
+}
+
+#gameAdmin p {
+    font-size: 15px;
+    font-weight: bold;
 }

@@ -44,7 +44,7 @@ class Chat extends Component {
                 <TalkBox topic="Чат" currentUserId={this.props.user.userId}
                          currentUser={this.props.user.nick} messages={ this.state.messages }
                          onSendMessage={ this.sendMessage } connected={ this.state.clientConnected }
-                        style={{width: 400, height: 100}}/>
+                        style={{width: 400}}/>
 
 
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/chat"]}

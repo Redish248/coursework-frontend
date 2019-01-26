@@ -51,9 +51,12 @@
 }
 
 #presents, #weaponTable {
-    padding-top: 20px;
     border-radius: 10px;
     background-color: #beefff;
+}
+
+#presents {
+    padding-top: 20px;
 }
 
 .iconDiv {
@@ -72,4 +75,8 @@ p {
 
 .ok {
     width: 50px;
+}
+
+.weap {
+    width: 70px;
 }

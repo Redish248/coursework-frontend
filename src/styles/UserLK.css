@@ -1,5 +1,5 @@
 #skillTable {
-    width: 400px;
+    width: 420px;
 }
 
 #mainTable td{
@@ -38,6 +38,8 @@
 #avatar {
     width: 300px;
     height: 300px;
+    border-radius: 10px;
+    border: 1px solid brown;
 }
 
 .userLK {
@@ -45,7 +47,43 @@
     display: inline-block;
     margin: 5px;
     border-radius: 10px;
-    background-color: #faffd4;
+    background: url('../images/br.jpg') no-repeat fixed center center;
     border: 2px solid brown;
 }
+
+#resultSkill {
+    height: 400px;
+    overflow-y: scroll;
+    background-color: #d4feff;
+    border-radius: 10px;
+}
+
+.user {
+    font-weight: bold;
+}
+
+.newTrain {
+    font-size: 15px;
+    border-radius: 10px;
+    border: 1px solid blue;
+    background-color: #d4feff;
+    width: 550px;
+}
+
+.newTrain td {
+    padding: 5px;
+    font-size: 17px;
+}
+
+.newTrain button {
+    background-color: #0001a7;
+    color: white;
+    border-radius: 5px;
+    width: 100px;
+}
+
+.trainName {
+    font-weight: bold;
+}
+
 
