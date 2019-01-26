@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as axios from "axios/index";
 import "../../styles/WeaponsAndPresents.css";
 import SockJsClient from "react-stomp";
+import {Growl} from "primereact/growl";
 
 class Presents extends Component {
 
@@ -67,8 +68,14 @@ class Presents extends Component {
             data: formData,
             withCredentials: true
         }).then((res) => {
-            this.onMessageReceive();
+            console.log(res.data.quantity);
+                console.log(res.data);
+            if (res.data === "Нельзя применить подарок в текущей локации"){
+                this.growl.showAttack({sticky: false, severity: 'error', summary: 'Ошибка', detail: res.data});
+            } else {
+                this.onMessageReceive();
             }
+        }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
                 that.props.history.push('/ss');
@@ -137,6 +144,7 @@ class Presents extends Component {
                 <SockJsClient url='http://localhost:8080/ws' topics={["/user/queue/presents"]}
                               onMessage={ this.onMessageReceive }
                               debug={ false }/>
+                <Growl ref={(el) => this.growl = el}/>
             </div>
         );
     }

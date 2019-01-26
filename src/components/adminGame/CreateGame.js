@@ -42,7 +42,7 @@ class CreateGame extends Component {
         }).then((res) => {
                 if (res.data.gameId === undefined) {
                     //FIXME: тоже под хедером не видно
-                    this.messages.show({sticky: true, severity: 'error', summary: 'Ошибка', detail: res.data});
+                    this.messages.showAttack({sticky: true, severity: 'error', summary: 'Ошибка', detail: res.data});
                 } else {
                     this.setState({
                         game: res.data

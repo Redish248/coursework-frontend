@@ -50,7 +50,7 @@ class VisitorGame extends Component {
         }).then((res) => {
                 this.setState({
                     tribute: res.data,
-                    show: true
+                    showAttack: true
                 });
             }
         ).catch(function (error) {
@@ -69,7 +69,7 @@ class VisitorGame extends Component {
 
     handleHide = () => {
       this.setState({
-          show: false
+          showAttack: false
       })
     };
 
@@ -103,7 +103,7 @@ class VisitorGame extends Component {
             <div>
                 <GameNavigation/>
 
-                <Modal show={this.state.show} onHide={() => this.setState({ show: false })} container={this} aria-labelledby="contained-modal-title">
+                <Modal show={this.state.show} onHide={() => this.setState({ showAttack: false })} container={this} aria-labelledby="contained-modal-title">
                     <Modal.Header closeButton>
                         <Modal.Title id="contained-modal-title">
                             Магазин
@@ -124,7 +124,7 @@ class VisitorGame extends Component {
                         <td><Map status="visitor"/></td>
                         <td>
                             <h3>Отправить подарок трибуту:</h3>
-                            <Button label="Перейти в магазин" onClick={() => {this.setState({show: true})}}/>
+                            <Button label="Перейти в магазин" onClick={() => {this.setState({showAttack: true})}}/>
                             <p>Трибуты:</p>
                             <div id="resultTributes" style={{width: 300, height: 300, overflowY: 'scroll', backgroundColor: 'white'}}>
                                 <center>

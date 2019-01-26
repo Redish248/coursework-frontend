@@ -29,18 +29,19 @@ class Notification extends Component {
         }
         if (type==="Конец игры"){
             this.setState({
-                show: true,
+                showAttack: true,
                 content: msg.content,
                 title: type
             })
         } else {
+            console.log(msg);
             this.growl.show({sticky: sticky, severity: severity, summary: type, detail: msg.content});
         }
     };
 
     onHide = (e) => {
         this.setState({
-            show: false
+            showAttack: false
         });
         if (this.props.isGamePage){
             this.props.history.push("/home");

@@ -28,7 +28,7 @@ class GameTribute extends Component {
         }).then((res) => {
                 this.setState({
                     user: res.data,
-                    show: true
+                    showAttack: true
                 });
             }
         ).catch(function (error) {

@@ -9,6 +9,9 @@ import {Dialog} from "primereact/dialog";
 import {Button} from "primereact/button";
 
 import "../../styles/GameTribute.css"
+import {Dropdown} from "primereact/dropdown";
+import {InputText} from "primereact/inputtext";
+import {Growl} from "primereact/growl";
 
 class Map extends Component {
     constructor(props) {
@@ -23,7 +26,12 @@ class Map extends Component {
             nick: '',
             picture: '',
             defending: '',
-            show: false
+            showAttack: false,
+            showHook: false,
+            hookX: 0,
+            hookY: 0,
+            hookName: '',
+            hooks: []
         }
 
     }
@@ -60,7 +68,7 @@ class Map extends Component {
             data: formData,
             withCredentials: true
         }).then((res) => {
-                //ok
+
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {
@@ -146,7 +154,6 @@ class Map extends Component {
         });
     };
 
-
     onClickCanvas = (e) => {
         let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
         let curX = this.state.curX, curY = this.state.curY;
@@ -167,17 +174,25 @@ class Map extends Component {
 
     isTributesInCell(curX, curY){
         let rival, foundFlag = false;
-        this.state.tributes.forEach(function (tribute) {
-            if (tribute.x===curX && tribute.y===curY){
-                foundFlag = true;
-                rival = tribute.nick;
-            }
-        });
-        if (foundFlag){
-            this.setState({
-                show: true,
-                defending: rival
+        if (this.props.status === "tribute") {
+            this.state.tributes.forEach(function (tribute) {
+                if (tribute.x === curX && tribute.y === curY) {
+                    foundFlag = true;
+                    rival = tribute.nick;
+                }
             });
+            if (foundFlag) {
+                this.setState({
+                    showAttack: true,
+                    defending: rival
+                });
+            } else {
+                this.setState({
+                    curX: curX,
+                    curY: curY
+                });
+                this.moveCanvas(curX, curY, true);
+            }
         } else {
             this.setState({
                 curX: curX,
@@ -208,7 +223,7 @@ class Map extends Component {
                 this.moveCanvas(this.state.curX, this.state.curY, true);
             }
         ).catch(function (error) {
-            console.log(error)
+            console.log(error);
             if (error === undefined || error.response === undefined) {
                 that.props.history.push('/ss');
             }
@@ -240,8 +255,8 @@ class Map extends Component {
         let name = this.state.nick;
         this.state.map.forEach(function (element) {
             let img = new Image();
-            let x = element.xcoordinate * imgSize;
-            let y = element.ycoordinate * imgSize;
+            let x = (element.xcoordinate - 1) * imgSize;
+            let y = (element.ycoordinate - 1) * imgSize;
             img.onload = function () {
                 ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
                 ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
@@ -315,7 +330,95 @@ class Map extends Component {
 
     onHide = (e) => {
         this.setState({
-            show: false
+            showAttack: false
+        });
+    };
+
+    onContextMenu = (e) => {
+        if (this.props.status === "admin") {
+            this.getHook();
+            let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
+            this.setState({
+                showHook: true,
+                hookX: Math.trunc(x / 100) + 1,
+                hookY: Math.trunc(y / 100) + 1
+            });
+        }
+    };
+
+    getHook = () => {
+        let that = this;
+        let url = 'http://localhost:8080/hungergames/get_hooks';
+        let hooks = [];
+        axios({
+            method: 'post',
+            url: url,
+            withCredentials: true
+        }).then((res) => {
+                res.data.forEach(function (item) {
+                    hooks[hooks.length] = {label: item, value: item}
+                });
+                console.log(hooks);
+                this.setState({
+                    hooks: hooks
+                });
+            }
+        ).catch(function (error) {
+            console.log(error);
+            if (error === undefined || error.response === undefined) {
+                that.props.history.push('/ss');
+            }
+        });
+    };
+
+    onHideHook = () => {
+        this.setState({
+            showHook: false,
+            hookName: ''
+        });
+    };
+
+    createHook = () => {
+        this.onHideHook();
+        let that = this;
+        let msg = '';
+        console.log(this.state.hookName+" "+this.state.hookX+" "+this.state.hookY);
+        if (this.state.hookName === ''){
+            this.showMessage('Ловушка не выбрана', 'error')
+        } else {
+            let formData = new FormData();
+            formData.set('x', this.state.hookX);
+            formData.set('y', this.state.hookY);
+            formData.set('hookName', this.state.hookName);
+            axios({
+                method: 'post',
+                url: 'http://localhost:8080/hungergames/createHook',
+                data: formData,
+                withCredentials: true
+            }).then((res) => {
+                    msg = res.data;
+                    /*if (msg !== "Ловушка установлена"){
+                        console.log(res.data);
+                        this.showMessage(msg, 'error');
+                    } else {
+                        this.showMessage(msg, 'success')
+                    }*/
+                }
+            ).catch(function (error) {
+                if (error === undefined || error.response === undefined) {
+                    that.props.history.push('/ss');
+                }
+            });
+        }
+    };
+
+    showMessage = (msg, severity) => {
+        this.growl.showAttack({sticky: false, severity: severity, summary: 'Ошибка', detail: msg});
+    };
+
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
         });
     };
 
@@ -328,9 +431,19 @@ class Map extends Component {
         );
         return (
             <div>
-                <canvas id="maps" ref="map" width={700} height={700} onClick={this.onClickCanvas}/>
-                <Dialog header="Атака" footer={footer} visible={this.state.show} modal={true} onHide={this.onHide}>
+                <canvas id="maps" ref="map" width={700} height={700} onClick={this.onClickCanvas} onContextMenu={this.onContextMenu}/>
+                <Dialog header="Атака" footer={footer} visible={this.state.showAttack} modal={true} onHide={this.onHide}>
                     Напасть на {this.state.defending}?
+                </Dialog>
+                <Dialog header="Установка ловушки" visible={this.state.showHook} modal={true} onHide={this.onHideHook}>
+                    <p>Название:</p>
+                    <p><Dropdown value={this.state.hookName} options={this.state.hooks} onChange={(e) => {this.setState({hookName: e.value})}} placeholder="Выберите ловушку"/>
+                    </p>
+                    <p>Координата X:</p>
+                    <p><InputText value={this.state.hookX} onChange={this.handleChange('x')}/></p>
+                    <p>Координата Y:</p>
+                    <p><InputText value={this.state.hookY} onChange={this.handleChange('y')}/></p>
+                    <Button label="Создать" onClick={this.createHook}/>
                 </Dialog>
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/tributesLocation"]}
                               onMessage={this.onMessageReceive}
@@ -341,6 +454,7 @@ class Map extends Component {
                 <SockJsClient url='http://localhost:8080/ws' topics={["/topic/weaponsAddLocation"]}
                               onMessage={this.onMessageWeaponAddReceive}
                               debug={false}/>
+                <Growl ref={(el) => this.growl = el}/>
             </div>
         );
     }

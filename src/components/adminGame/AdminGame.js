@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Notification from "../Notification";
 import GameNavigation from "../Navigation/GameNavigation";
 import * as axios from "axios/index";
-import {InputText} from "primereact/components/inputtext/InputText";
-import {Button} from "primereact/components/button/Button";
 import Map from "../game/Map";
 import {DataTable} from "primereact/components/datatable/DataTable";
 import {Column} from "primereact/components/column/Column";
@@ -15,8 +13,7 @@ class AdminGame extends Component {
             game: [],
             x: 0,
             y: 0,
-            hookName: '',
-            tributes: []
+            tributes: [],
         })
     }
 
@@ -46,28 +43,6 @@ class AdminGame extends Component {
         });
     };
 
-    createHook() {
-        let that = this;
-        let formData = new FormData();
-        formData.set('gameId', this.state.game.gameId);
-        formData.set('x', this.state.x);
-        formData.set('y', this.state.y);
-        formData.set('hookName', this.state.hookName);
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/hungergames/createHook',
-            data: formData,
-            withCredentials: true
-        }).then((res) => {
-                console.log(res.data)
-            }
-        ).catch(function (error) {
-            if (error === undefined || error.response === undefined) {
-                that.props.history.push('/ss');
-            }
-        });
-    }
-
     getTributes = () => {
         let that = this;
         let url = 'http://localhost:8080/hungergames/game/get_tributes_of_game';
@@ -93,7 +68,6 @@ class AdminGame extends Component {
         this.getTributes();
     }
 
-    //TODO: для ловушек надо кликать на карту, будет вылезать окно, там список ловушек. Выбираешь - она устанавливется
     render() {
         return(
             <div>
@@ -104,14 +78,6 @@ class AdminGame extends Component {
                     <tr>
                         <td><Map status="admin"/></td>
                         <td>
-                            <h4>Создать ловушку:</h4>
-                            <p>Название:</p>
-                            <p><InputText value={this.state.hookName} onChange={this.handleChange('hookName')}/></p>
-                            <p>Координата X:</p>
-                            <p><InputText value={this.state.x} onChange={this.handleChange('x')}/></p>
-                            <p>Координата Y:</p>
-                            <p><InputText value={this.state.y} onChange={this.handleChange('y')}/></p>
-                            <Button label="Создать" onCLick={this.createHook}/>
                             <br/><br/>
                             <div id="resultTributes" style={{width: 200, height: 250, overflowY: 'scroll', backgroundColor: 'white'}}>
                                 <p>Список трибутов:</p>

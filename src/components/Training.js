@@ -47,7 +47,7 @@ class Training extends Component {
 
             if(val >= 100) {
                 val = 100;
-                this.growl.show({severity: 'info', summary: 'Success', detail: 'Process Completed'});
+                this.growl.showAttack({severity: 'info', summary: 'Success', detail: 'Process Completed'});
                 clearInterval(this.interval);
             }
 

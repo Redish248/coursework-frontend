@@ -88,7 +88,7 @@ class UserLK extends Component {
             }).then((res) => {
                     this.setState({
                         user: res.data,
-                        show: false,
+                        showAttack: false,
                         password: '',
                         newPassword: '',
                         pass: ''
@@ -177,7 +177,7 @@ class UserLK extends Component {
                     currentTrain: element
                 });
             } else {
-                this.messages.show({severity: 'error', summary: 'Ошибка!', detail: 'Недостаточно средств'});
+                this.messages.showAttack({severity: 'error', summary: 'Ошибка!', detail: 'Недостаточно средств'});
             }
         }
 
@@ -295,10 +295,10 @@ class UserLK extends Component {
                             </table>
 
                             <div className="modal-container">
-                                <Button bsstyle="primary" bssize="large" onClick={() => this.setState({show: true})}
+                                <Button bsstyle="primary" bssize="large" onClick={() => this.setState({showAttack: true})}
                                         label="Сменить пароль"/>
 
-                                <Modal show={this.state.show} onHide={() => this.setState({show: false})}
+                                <Modal show={this.state.show} onHide={() => this.setState({showAttack: false})}
                                        container={this} aria-labelledby="contained-modal-title">
                                     <Modal.Header closeButton>
                                         <Modal.Title id="contained-modal-title">
