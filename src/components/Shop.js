@@ -70,7 +70,7 @@ class Shop extends Component {
             data: formData,
             withCredentials: true
         }).then((res) => {
-                console.log("Доставлено!")
+                console.log("res.data")
             }
         ).catch(function (error) {
             if (error === undefined || error.response === undefined) {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import * as axios from "axios";
 import SockJsClient from "react-stomp";
 import PointImg from "../../images/user.png";
@@ -36,7 +36,7 @@ class Map extends Component {
 
     }
 
-    tributeInfo(){
+    tributeInfo() {
         let that = this;
         axios({
             method: 'get',
@@ -85,7 +85,7 @@ class Map extends Component {
 
     updateTributeLoc = (msg) => {
         let index = -1;
-        if (msg.nick!==this.state.nick) {
+        if (msg.nick !== this.state.nick) {
             for (let i = 0; i < this.state.tributes.length; i++) {
                 if (this.state.tributes[i].nick === msg.nick) {
                     index = i;
@@ -108,7 +108,7 @@ class Map extends Component {
 
     addWeaponLoc = (msg) => {
         let index = -1;
-        if (msg.nick!==this.state.nick) {
+        if (msg.nick !== this.state.nick) {
             for (let i = 0; i < this.state.weapons.length; i++) {
                 if (this.state.weapons[i].nick === msg.nick) {
                     index = i;
@@ -154,6 +154,7 @@ class Map extends Component {
         });
     };
 
+
     onClickCanvas = (e) => {
         let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
         let curX = this.state.curX, curY = this.state.curY;
@@ -172,7 +173,7 @@ class Map extends Component {
         this.isTributesInCell(curX, curY);
     };
 
-    isTributesInCell(curX, curY){
+    isTributesInCell(curX, curY) {
         let rival, foundFlag = false;
         if (this.props.status === "tribute") {
             this.state.tributes.forEach(function (tribute) {
@@ -209,16 +210,16 @@ class Map extends Component {
             url: 'http://localhost:8080/hungergames/game/game_start_pack',
             withCredentials: true
         }).then((res) => {
-            this.setState({
-                map: res.data.area,
-                locations: res.data.location,
-            });
-            res.data.tributes.forEach(function (item) {
-                that.updateTributeLoc(item);
-            });
-            res.data.weapons.forEach(function (item) {
-                that.addWeaponLoc(item);
-            });
+                this.setState({
+                    map: res.data.area,
+                    locations: res.data.location,
+                });
+                res.data.tributes.forEach(function (item) {
+                    that.updateTributeLoc(item);
+                });
+                res.data.weapons.forEach(function (item) {
+                    that.addWeaponLoc(item);
+                });
 
                 this.moveCanvas(this.state.curX, this.state.curY, true);
             }
@@ -230,7 +231,7 @@ class Map extends Component {
         });
     };
 
-    drawWeapon(curX, curY, weapons){
+    drawWeapon(curX, curY, weapons) {
         let imgSize = 100;
         let xStart = 4, yStart = 4;
         const canvas = this.refs.map;
@@ -260,21 +261,21 @@ class Map extends Component {
             img.onload = function () {
                 //TODO: Только видимая область
                 //if (( x - (curX - xStart) * imgSize < 700) && ( y - (curY - yStart) * imgSize < 700 )) {
-                    ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
-                    ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
-               // }
+                ctx.clearRect(x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
+                ctx.drawImage(img, x - (curX - xStart) * imgSize, y - (curY - yStart) * imgSize, imgSize, imgSize);
+                // }
             };
             img.src = "data:image/png;base64," + loc[element.locationId - 1].picture;
         });
         let userImg = new Image();
         userImg.onload = function () {
-            ctx.drawImage(userImg, 310,310,70,70);
+            ctx.drawImage(userImg, 310, 310, 70, 70);
             ctx.fillStyle = "#000";
             ctx.font = "italic 15pt Arial";
             ctx.fillText(name, 315, 390);
         };
         userImg.src = this.state.picture;
-        if (changeFlag && this.props.status==="tribute") {
+        if (changeFlag && this.props.status === "tribute") {
             this.move(curX, curY);
         }
         this.state.tributes.forEach(function (tribute) {
@@ -284,7 +285,7 @@ class Map extends Component {
                     ctx.drawImage(tributesImg, 310 + (tribute.x - curX) * imgSize, 310 + (tribute.y - curY) * imgSize, 70, 70);
                     ctx.fillStyle = "#000";
                     ctx.font = "italic 14pt Arial";
-                    ctx.fillText(tribute.nick,  310 + (tribute.x - curX) * imgSize, 390 + (tribute.y - curY) * imgSize);
+                    ctx.fillText(tribute.nick, 310 + (tribute.x - curX) * imgSize, 390 + (tribute.y - curY) * imgSize);
                 };
                 tributesImg.src = TributeImg;
             }
@@ -313,7 +314,7 @@ class Map extends Component {
     };
 
     componentDidMount() {
-        if (this.props.status==="tribute") {
+        if (this.props.status === "tribute") {
             this.setState({
                 picture: PointImg
             });
@@ -339,12 +340,15 @@ class Map extends Component {
 
     onContextMenu = (e) => {
         if (this.props.status === "admin") {
+            let x = e.nativeEvent.offsetX/10, y = e.nativeEvent.offsetY/10;
+            let curX = this.state.curX, curY = this.state.curY;
+            curX = Math.trunc(curX + (x - 30) / 10);
+            curY = Math.trunc(curY + (y - 30) / 10);
             this.getHook();
-            let x = e.nativeEvent.offsetX, y = e.nativeEvent.offsetY;
             this.setState({
                 showHook: true,
-                hookX: Math.trunc(x / 100) + 1,
-                hookY: Math.trunc(y / 100) + 1
+                hookX: curX,
+                hookY: curY
             });
         }
     };
@@ -385,8 +389,8 @@ class Map extends Component {
         this.onHideHook();
         let that = this;
         let msg = '';
-        console.log(this.state.hookName+" "+this.state.hookX+" "+this.state.hookY);
-        if (this.state.hookName === ''){
+        // console.log(this.state.hookName+" "+this.state.hookX+" "+this.state.hookY);
+        if (this.state.hookName === '') {
             this.showMessage('Ловушка не выбрана', 'error')
         } else {
             let formData = new FormData();
@@ -400,12 +404,11 @@ class Map extends Component {
                 withCredentials: true
             }).then((res) => {
                     msg = res.data;
-                    /*if (msg !== "Ловушка установлена"){
-                        console.log(res.data);
+                    if (msg !== "Ловушка установлена") {
                         this.showMessage(msg, 'error');
                     } else {
                         this.showMessage(msg, 'success')
-                    }*/
+                    }
                 }
             ).catch(function (error) {
                 if (error === undefined || error.response === undefined) {
@@ -428,19 +431,23 @@ class Map extends Component {
     render() {
         const footer = (
             <div>
-                <Button label="Да" icon="pi pi-check" onClick={this.onAgree} />
-                <Button label="Нет" icon="pi pi-times" onClick={this.onHide} />
+                <Button label="Да" icon="pi pi-check" onClick={this.onAgree}/>
+                <Button label="Нет" icon="pi pi-times" onClick={this.onHide}/>
             </div>
         );
         return (
             <div>
-                <canvas id="maps" ref="map" width={700} height={700} onClick={this.onClickCanvas} onContextMenu={this.onContextMenu}/>
-                <Dialog header="Атака" footer={footer} visible={this.state.showAttack} modal={true} onHide={this.onHide}>
+                <canvas id="maps" ref="map" width={700} height={700} onClick={this.onClickCanvas}
+                        onContextMenu={this.onContextMenu}/>
+                <Dialog header="Атака" footer={footer} visible={this.state.showAttack} modal={true}
+                        onHide={this.onHide}>
                     Напасть на {this.state.defending}?
                 </Dialog>
                 <Dialog header="Установка ловушки" visible={this.state.showHook} modal={true} onHide={this.onHideHook}>
                     <p>Название:</p>
-                    <p><Dropdown value={this.state.hookName} options={this.state.hooks} onChange={(e) => {this.setState({hookName: e.value})}} placeholder="Выберите ловушку"/>
+                    <p><Dropdown value={this.state.hookName} options={this.state.hooks} onChange={(e) => {
+                        this.setState({hookName: e.value})
+                    }} placeholder="Выберите ловушку"/>
                     </p>
                     <p>Координата X:</p>
                     <p><InputText value={this.state.hookX} onChange={this.handleChange('x')}/></p>
