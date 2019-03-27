@@ -7,3 +7,5 @@ front-end
 #### `Redux`
 
 
+BACK-END is here: https://github.com/olyasoboleva/Coursework_IAD
+
